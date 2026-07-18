@@ -15,6 +15,7 @@
   "sessions": {
     "full-body-a": {
       "title": "Full Body A — Squat & Push",
+      "equipment": ["Yoga mat", "Sturdy chair (to brace for rows)", "Water bottle"],
       "blocks": [
         { "exerciseId": "Inchworm", "sets": 2, "reps": 8, "restSec": 30, "note": "Warm-up, go slow" },
         { "exerciseId": "Bodyweight_Squat", "sets": 2, "reps": 15, "restSec": 45, "note": "Warm-up pace" },
@@ -28,6 +29,7 @@
     },
     "full-body-b": {
       "title": "Full Body B — Lunge & Pull",
+      "equipment": ["Yoga mat", "Sturdy chair (for bench dips)", "Water bottle"],
       "blocks": [
         { "exerciseId": "Inchworm", "sets": 2, "reps": 8, "restSec": 30, "note": "Warm-up, go slow" },
         { "exerciseId": "Dumbbell_Lunges", "sets": 3, "reps": 10, "weightKg": 6, "restSec": 75, "note": "10 per leg" },
@@ -41,6 +43,7 @@
     },
     "full-body-c": {
       "title": "Full Body C — Hinge & Carry",
+      "equipment": ["Yoga mat", "Clear space at the bottom stair (step-ups)", "Chair or bench (seated press)", "Water bottle"],
       "blocks": [
         { "exerciseId": "Inchworm", "sets": 2, "reps": 8, "restSec": 30, "note": "Warm-up, go slow" },
         { "exerciseId": "Dumbbell_Step_Ups", "sets": 3, "reps": 10, "weightKg": 6, "restSec": 75, "note": "Use bottom stair, 10 per leg" },

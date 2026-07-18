@@ -207,6 +207,28 @@ body { min-height: 100vh; min-height: 100dvh; }
 
 .player-actions { margin-top: 16px; }
 
+.gear-list { list-style: none; text-align: left; margin: 10px 0 4px; }
+.gear-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 10px;
+  border-bottom: 1px solid var(--surface-2);
+  font-size: 1.05rem;
+  cursor: pointer;
+  user-select: none;
+}
+.gear-item:last-child { border-bottom: none; }
+.gear-check {
+  font-size: 1.3rem;
+  color: var(--text-dim);
+  width: 28px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.gear-item.checked { color: var(--text-dim); }
+.gear-item.checked .gear-check { color: var(--accent); }
+
 .done-screen { text-align: center; padding: 30px 16px; }
 .done-screen .big { font-size: 3.5rem; margin-bottom: 12px; }
 .done-screen h2 { margin-bottom: 8px; }

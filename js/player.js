@@ -37,7 +37,51 @@ const Player = {
     this.onExit = onExit;
     WakeLock.acquire();
     Sound.ensure(); // unlock audio inside the user gesture that started the workout
-    this.showExercise();
+    this.showReadyCheck();
+  },
+
+  /* Equipment needed for this session: dumbbell weights are derived from the
+     blocks; everything else comes from session.equipment in plan.json. */
+  _equipmentList() {
+    const items = [];
+    const weights = [...new Set(
+      this.session.blocks.filter(b => b.weightKg != null).map(b => b.weightKg)
+    )].sort((a, b) => a - b);
+    if (weights.length) items.push(`Dumbbells — ${weights.join(', ')} kg (per hand)`);
+    for (const item of this.session.equipment || []) items.push(item);
+    return items;
+  },
+
+  showReadyCheck() {
+    this._cleanupScreen();
+    const items = this._equipmentList();
+    if (!items.length) return this.showExercise();
+
+    this.root.innerHTML = `
+      ${this._header(this.session.title)}
+      <div class="player-card">
+        <h2>Get ready</h2>
+        <div class="muscles">You'll need for this session:</div>
+        <ul class="gear-list">
+          ${items.map(it => `
+            <li class="gear-item"><span class="gear-check">○</span><span>${esc(it)}</span></li>`).join('')}
+        </ul>
+        <div class="player-actions">
+          <button class="btn" id="p-ready">All set — start ✓</button>
+        </div>
+        <button class="btn-ghost" id="p-back" style="margin-top:8px">← Back</button>
+      </div>`;
+
+    this._bindQuit();
+    this.root.querySelectorAll('.gear-item').forEach(li => {
+      li.onclick = () => {
+        li.classList.toggle('checked');
+        li.querySelector('.gear-check').textContent =
+          li.classList.contains('checked') ? '✓' : '○';
+      };
+    });
+    document.getElementById('p-ready').onclick = () => this.showExercise();
+    document.getElementById('p-back').onclick = () => this.quit();
   },
 
   _cleanupScreen() {

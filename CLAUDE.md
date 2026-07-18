@@ -9,7 +9,8 @@ The user asks for program changes in chat ("make Wednesday harder", "swap X, my 
 ## plan.json contract
 
 - `schedule`: weekday keys `mon`..`sun` → session key or `"rest"`
-- `sessions.<key>`: `{ title, blocks: [...] }`
+- `sessions.<key>`: `{ title, equipment?, blocks: [...] }`
+  - `equipment`: strings shown on the pre-workout "Get ready" checklist (mat, chair, stairs…). Dumbbell weights are derived automatically from the blocks — don't list them here. Keep this in sync when changing a session's exercises.
 - block: `{ exerciseId, sets, reps | durationSec, weightKg?, restSec, note? }`
   - `reps` → rep-based set (user taps done); `durationSec` → timed set (countdown + beeps)
   - `weightKg` is **per dumbbell**
