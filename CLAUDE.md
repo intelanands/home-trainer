@@ -14,6 +14,7 @@ The user asks for program changes in chat ("make Wednesday harder", "swap X, my 
   - `reps` → rep-based set (user taps done); `durationSec` → timed set (countdown + beeps)
   - `weightKg` is **per dumbbell**
   - `note` is shown prominently in the player ("per side", "use stairs", form cues)
+  - `animate?` (boolean) overrides photo animation. Default: rep-based blocks animate, timed blocks show a still frame (static holds like Plank flicker confusingly when alternated). Set `animate: true` on a timed-but-dynamic exercise (e.g. timed mountain climbers).
 
 ## Exercise library
 

@@ -141,7 +141,10 @@ const Player = {
       </div>`;
 
     this._bindQuit();
-    this._startAnim(document.getElementById('p-img'), ex?.images);
+    // Static holds (timed sets) show a single still frame — alternating photos
+    // of a near-identical pose reads as flicker. block.animate overrides.
+    const animate = b.animate ?? !isTimed;
+    if (animate) this._startAnim(document.getElementById('p-img'), ex?.images);
     document.getElementById('p-skip').onclick = () => this._nextBlock();
 
     if (isTimed) {

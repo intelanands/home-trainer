@@ -2,7 +2,7 @@
    - App shell + images: cache-first (immutable-ish, bump VERSION to refresh)
    - data/*.json: network-first so plan updates from Claude arrive promptly */
 
-const VERSION = 'v1';
+const VERSION = 'v2';
 const SHELL_CACHE = `trainer-shell-${VERSION}`;
 const RUNTIME_CACHE = 'trainer-runtime';
 
