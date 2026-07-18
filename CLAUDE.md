@@ -20,7 +20,7 @@ The user asks for program changes in chat ("make Wednesday harder", "swap X, my 
 ## Exercise library
 
 - `data/exercises.json`: vendored subset (~47) of free-exercise-db (public domain). Fields: id, name, level, equipment, category, primaryMuscles, secondaryMuscles, instructions[], images[] (repo-relative).
-- Images live in `img/exercises/<id>/0.jpg,1.jpg` (start/end pose; player alternates them).
+- Images live in `img/exercises/<id>/0.jpg,1.jpg` (start/end pose; player alternates them). The dataset has exactly 2 images per exercise — no more exist upstream. For movements 2 frames can't explain, each exercise card auto-links a YouTube search ("<name> exercise form"); no per-exercise config needed.
 - **Adding a new exercise**: pick an id from https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/dist/exercises.json, append the entry to `data/exercises.json` (rewrite `images` paths to `img/exercises/...`), and download its images from `https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/<id>/<n>.jpg`. Only use equipment the user has (body only / dumbbell / chair / stairs / bench).
 
 ## Code map

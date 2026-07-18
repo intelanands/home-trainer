@@ -229,6 +229,16 @@ body { min-height: 100vh; min-height: 100dvh; }
 .gear-item.checked { color: var(--text-dim); }
 .gear-item.checked .gear-check { color: var(--accent); }
 
+.video-link {
+  display: block;
+  margin-top: 12px;
+  padding: 10px;
+  color: #7dd3fc;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
 .done-screen { text-align: center; padding: 30px 16px; }
 .done-screen .big { font-size: 3.5rem; margin-bottom: 12px; }
 .done-screen h2 { margin-bottom: 8px; }

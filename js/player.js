@@ -140,6 +140,15 @@ const Player = {
       </details>`;
   },
 
+  /* The 2-frame photos can't explain every movement — link a YouTube search
+     for the exercise so a proper demo is one tap away. */
+  _videoLinkHtml(name) {
+    const q = encodeURIComponent(`${name} exercise form`);
+    return `
+      <a class="video-link" href="https://www.youtube.com/results?search_query=${esc(q)}"
+         target="_blank" rel="noopener">▷ Watch video</a>`;
+  },
+
   showExercise() {
     this._cleanupScreen();
     const b = this.block();
@@ -182,6 +191,7 @@ const Player = {
         `}
         <button class="btn-ghost" id="p-skip" style="margin-top:8px">Skip exercise →</button>
         ${this._instructionsHtml(ex)}
+        ${this._videoLinkHtml(ex?.name || b.exerciseId)}
       </div>`;
 
     this._bindQuit();
