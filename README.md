@@ -14,6 +14,10 @@ A personal, AI-backed home workout companion. Static web app (no backend, no bui
 Exercise names, instructions, and images are vendored from
 [free-exercise-db](https://github.com/yuhonas/free-exercise-db) (public domain, Unlicense).
 
+## Hosting
+
+Served at https://gym.recat.in from a personal server (nginx + Cloudflare Tunnel); see `deploy/setup-gym.sh`.
+
 ## Run locally
 
 Any static file server works, e.g.:

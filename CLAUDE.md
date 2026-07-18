@@ -1,10 +1,24 @@
 # Home Trainer — Claude working notes
 
-Personal single-user workout PWA. Vanilla HTML/CSS/JS, no build step, deployed to GitHub Pages straight from `main`. The user trains at home: 2× dumbbells up to 10 kg, yoga mat, stairs, chair, bench-like furniture.
+Personal single-user workout PWA. Vanilla HTML/CSS/JS, no build step. Served at **https://gym.recat.in** from the user's own Ubuntu server (the Tally Connector ERP box, `administrator@192.168.1.13`) via nginx + Cloudflare Tunnel. The user trains at home: 2× dumbbells up to 10 kg, yoga mat, stairs, chair, bench-like furniture.
 
 ## The core workflow
 
-The user asks for program changes in chat ("make Wednesday harder", "swap X, my shoulder hurts", "here's my exported history — adjust the plan"). You edit **`data/plan.json`**, commit, push. GitHub Pages redeploys automatically; the phone app fetches the new plan (service worker uses network-first for `data/`).
+The user asks for program changes in chat ("make Wednesday harder", "swap X, my shoulder hurts", "here's my exported history — adjust the plan"). You edit **`data/plan.json`**, commit, push, then deploy:
+
+```
+git push && ssh administrator@192.168.1.13 "git -C /opt/home-trainer pull"
+```
+
+Updates are live immediately (nginx sends `Cache-Control: no-cache` for app files; the app self-reloads when a new service worker version arrives). `.claude/settings.local.json` (gitignored) allows the ssh command without prompts.
+
+## Hosting details
+
+- Server checkout: `/opt/home-trainer` (clone of this repo, pulled to deploy)
+- nginx site: `/etc/nginx/sites-available/home-trainer` (from `deploy/setup-gym.sh`) — no-cache for app files, 30-day immutable for `img/exercises/`, hidden files denied
+- Cloudflare Tunnel ingress: `gym.recat.in → localhost:80` in `/etc/cloudflared/config.yml` (tunnel `tally-portal`, id 410a8965…). DNS is a manual CNAME in the recat.in zone → `<tunnel-id>.cfargotunnel.com` (the tunnel cert only covers catapharma.com, so `cloudflared tunnel route dns` cannot manage recat.in)
+- Full recreation: run `deploy/setup-gym.sh` on the server
+- GitHub Pages hosting was retired in July 2026 (repo remains the source of truth)
 
 ## plan.json contract
 

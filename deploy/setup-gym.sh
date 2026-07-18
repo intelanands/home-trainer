@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+# One-time setup: host Home Trainer at gym.recat.in from the ERP server.
+# Run on the server (or: ssh administrator@192.168.1.13 'bash -s' < deploy/setup-gym.sh)
+set -euo pipefail
+
+echo '=== 1/4 Clone (or update) the app ==='
+if [ ! -d /opt/home-trainer ]; then
+  sudo mkdir -p /opt/home-trainer
+  sudo chown administrator:administrator /opt/home-trainer
+  git clone https://github.com/intelanands/home-trainer.git /opt/home-trainer
+else
+  git -C /opt/home-trainer pull
+fi
+
+echo '=== 2/4 Nginx site (graceful reload, no portal downtime) ==='
+sudo tee /etc/nginx/sites-available/home-trainer > /dev/null << 'EOF'
+server {
+    listen 80;
+    server_name gym.recat.in;
+    root /opt/home-trainer;
+    index index.html;
+
+    # Small app files: always revalidate so updates apply on next launch
+    add_header Cache-Control "no-cache";
+
+    # Exercise photos are immutable - cache aggressively
+    location /img/exercises/ {
+        add_header Cache-Control "public, max-age=2592000, immutable";
+    }
+
+    # Never serve repo internals (.git, .claude)
+    location ~ /\. { deny all; }
+
+    location / { try_files $uri $uri/ =404; }
+}
+EOF
+sudo ln -sf /etc/nginx/sites-available/home-trainer /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl reload nginx
+# Sanity check: nginx answers for the new hostname locally
+curl -s -o /dev/null -w 'local nginx check: %{http_code}\n' -H 'Host: gym.recat.in' http://localhost/
+
+echo '=== 3/4 Cloudflare tunnel ingress (brief blip on all tunnel subdomains) ==='
+if ! sudo grep -q 'gym\.recat\.in' /etc/cloudflared/config.yml; then
+  sudo sed -i 's|^\(\s*\)- service: http_status:404|\1- hostname: gym.recat.in\n\1  service: http://localhost:80\n\1- service: http_status:404|' /etc/cloudflared/config.yml
+fi
+echo '--- resulting config ---'
+sudo cat /etc/cloudflared/config.yml
+sudo systemctl restart cloudflared
+sleep 3
+systemctl is-active cloudflared
+
+echo '=== 4/4 DNS route ==='
+if cloudflared tunnel route dns tally-portal gym.recat.in; then
+  echo 'DNS route created automatically.'
+else
+  TUNNEL_ID=$(cloudflared tunnel list 2>/dev/null | awk '/tally-portal/ {print $1}')
+  echo ''
+  echo '!!! Automatic DNS route failed (tunnel cert likely only covers catapharma.com).'
+  echo '!!! Add this record manually in the Cloudflare dashboard, zone recat.in:'
+  echo "!!!   Type: CNAME | Name: gym | Target: ${TUNNEL_ID}.cfargotunnel.com | Proxy status: Proxied (orange cloud)"
+fi
+
+echo 'DONE'
