@@ -29,7 +29,7 @@ The user asks for program changes in chat ("make Wednesday harder", "swap X, my 
 - `js/player.js` — workout state machine (`Player`), `esc()` HTML-escape helper
 - `js/timer.js` — `Countdown`, `Sound` (WebAudio beeps), `WakeLock`
 - `js/history.js` — localStorage log (`trainer.history.v1`), export/copy
-- `sw.js` — bump `VERSION` when shell files (html/css/js) change, otherwise clients keep the old cached shell
+- `sw.js` — bump `VERSION` when shell files (html/css/js) change, otherwise clients keep the old cached shell. Bump `APP_VERSION` in `js/app.js` to the same value (it's displayed in the Today footer so the user can see which version their phone runs). The app auto-reloads once when a new SW takes control (unless mid-workout), so updates apply on the next launch, not the second.
 
 ## Conventions
 

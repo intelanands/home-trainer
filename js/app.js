@@ -2,6 +2,8 @@
    All values interpolated into innerHTML templates are escaped via esc()
    (defined in player.js), including user-entered history notes. */
 
+const APP_VERSION = 'v6'; // keep in sync with VERSION in sw.js
+
 const App = {
   plan: null,
   exercisesById: {},
@@ -31,7 +33,19 @@ const App = {
     };
 
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js').catch(() => {});
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => reg.update())
+        .catch(() => {});
+      // When a new service worker takes over, reload once so the fresh
+      // version applies immediately — no second-launch dance. Skip the very
+      // first install (no previous controller) and never reload mid-workout.
+      const hadController = !!navigator.serviceWorker.controller;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (!hadController || this._reloaded) return;
+        if (!document.getElementById('view-player').classList.contains('hidden')) return;
+        this._reloaded = true;
+        location.reload();
+      });
     }
 
     this.renderToday();
@@ -127,6 +141,8 @@ const App = {
       }
       html += '</div>';
     }
+
+    html += `<div class="app-version">Home Trainer ${APP_VERSION}</div>`;
 
     container.innerHTML = html;
     container.querySelectorAll('[data-start]').forEach(btn => {
