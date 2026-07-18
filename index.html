@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#10151f">
+  <title>Home Trainer</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./img/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./img/icon-192.png">
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <main id="view-root">
+    <!-- TODAY VIEW -->
+    <section id="view-today" class="view">
+      <header class="app-header">
+        <h1 id="today-date">Today</h1>
+        <p id="today-subtitle" class="subtitle"></p>
+      </header>
+      <div id="today-content"></div>
+    </section>
+
+    <!-- PLAYER VIEW -->
+    <section id="view-player" class="view hidden">
+      <div id="player-content"></div>
+    </section>
+
+    <!-- HISTORY VIEW -->
+    <section id="view-history" class="view hidden">
+      <header class="app-header">
+        <h1>History</h1>
+        <p class="subtitle">Your completed workouts</p>
+      </header>
+      <div id="history-content"></div>
+      <div class="history-actions">
+        <button id="btn-export" class="btn btn-secondary">Export JSON</button>
+        <button id="btn-copy" class="btn btn-secondary">Copy to clipboard</button>
+      </div>
+    </section>
+  </main>
+
+  <nav id="bottom-nav">
+    <button data-nav="today" class="nav-btn active">
+      <span class="nav-icon">&#127968;</span><span>Today</span>
+    </button>
+    <button data-nav="history" class="nav-btn">
+      <span class="nav-icon">&#128203;</span><span>History</span>
+    </button>
+  </nav>
+
+  <script src="./js/timer.js"></script>
+  <script src="./js/history.js"></script>
+  <script src="./js/player.js"></script>
+  <script src="./js/app.js"></script>
+</body>
+</html>
