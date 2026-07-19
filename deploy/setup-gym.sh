@@ -59,8 +59,10 @@ server {
     root /opt/home-trainer;
     index index.html;
 
-    # Small app files: always revalidate so updates apply on next launch
-    add_header Cache-Control "no-cache";
+    # Small app files: no-store — clients and proxies must never keep a copy.
+    # (no-cache allowed revalidation-based staleness on some devices; these
+    # files are tiny, always fetch fresh.)
+    add_header Cache-Control "no-store";
 
     # LOGIN WALL: every request must carry the gympin cookie; the history API
     # validates it via this auth subrequest. Anything unauthenticated gets
