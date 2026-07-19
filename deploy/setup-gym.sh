@@ -84,13 +84,19 @@ systemctl is-active cloudflared
 echo '=== 4/5 History API service ==='
 sudo mkdir -p /opt/home-trainer-data
 sudo chown administrator:administrator /opt/home-trainer-data
+if [ ! -f /opt/home-trainer-data/pin.txt ]; then
+  tr -dc 0-9 < /dev/urandom | head -c 6 > /opt/home-trainer-data/pin.txt
+  chmod 600 /opt/home-trainer-data/pin.txt
+  echo "Generated new API PIN (the app asks for it once per device): $(cat /opt/home-trainer-data/pin.txt)"
+fi
 sudo cp /opt/home-trainer/deploy/home-trainer-api.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable --now home-trainer-api
 sudo systemctl restart home-trainer-api  # pick up script changes on redeploys
 sleep 1
-curl -s -o /dev/null -w 'api direct: %{http_code}\n' http://127.0.0.1:8091/api/history
-curl -s -o /dev/null -w 'api via nginx: %{http_code}\n' -H 'Host: gym.recat.in' http://localhost/api/history
+curl -s -o /dev/null -w 'api without pin (want 401): %{http_code}\n' http://127.0.0.1:8091/api/history
+curl -s -o /dev/null -w 'api with pin (want 200): %{http_code}\n' -H "X-Gym-Pin: $(cat /opt/home-trainer-data/pin.txt)" http://127.0.0.1:8091/api/history
+curl -s -o /dev/null -w 'api via nginx (want 401): %{http_code}\n' -H 'Host: gym.recat.in' http://localhost/api/history
 
 echo '=== 5/5 DNS check ==='
 # DNS is a MANUAL record — the tunnel cert only covers catapharma.com, so

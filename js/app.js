@@ -2,7 +2,7 @@
    All values interpolated into innerHTML templates are escaped via esc()
    (defined in player.js), including user-entered history notes. */
 
-const APP_VERSION = 'v9'; // keep in sync with VERSION in sw.js
+const APP_VERSION = 'v10'; // keep in sync with VERSION in sw.js
 
 const App = {
   plan: null,
@@ -50,22 +50,39 @@ const App = {
 
     this.renderToday();
     this.show('today');
-    // retry any workouts that couldn't reach the server; if sync is blocked
-    // while online (server down, or an auth wall like Cloudflare Access
-    // wants a fresh sign-in), surface the banner on the Today view
+    // retry any workouts that couldn't reach the server; if sync needs the
+    // PIN or is blocked while online, surface the banner on the Today view
     History.sync().then(status => {
-      if (status === 'blocked') this.renderToday();
+      if (status === 'pin' || status === 'blocked') this.renderToday();
     });
   },
 
   /* './?signin=<ts>' busts the service-worker cache so the navigation truly
      hits the network — which is what lets an auth wall run its login flow. */
   _syncBannerHtml() {
+    if (History.lastSyncStatus === 'pin') {
+      return `
+        <button class="sync-banner" id="pin-banner">
+          🔑 Enter your PIN to sync workouts — tap here
+        </button>`;
+    }
     if (History.lastSyncStatus !== 'blocked') return '';
     return `
       <a class="sync-banner" href="./?signin=${Date.now()}">
         ⚠ Workout sync is blocked — tap to reconnect / sign in
       </a>`;
+  },
+
+  _bindPinBanner(container) {
+    const banner = container.querySelector('#pin-banner');
+    if (!banner) return;
+    banner.onclick = async () => {
+      const v = prompt('Enter your Home Trainer PIN (ask Claude if you lost it):');
+      if (!v) return;
+      History.setPin(v);
+      await History.sync();
+      this.renderToday();
+    };
   },
 
   show(view) {
@@ -164,6 +181,7 @@ const App = {
     container.querySelectorAll('[data-start]').forEach(btn => {
       btn.onclick = () => this.startWorkout(btn.dataset.start);
     });
+    this._bindPinBanner(container);
   },
 
   startWorkout(sessionKey) {

@@ -9,12 +9,35 @@ Data lives in /opt/home-trainer-data/history.jsonl — one JSON object per
 line, OUTSIDE the repo checkout so `git pull` deploys never touch it.
 """
 from http.server import BaseHTTPRequestHandler, HTTPServer
+import hmac
 import json
 import os
+import time
 
 DATA_DIR = '/opt/home-trainer-data'
 FILE = os.path.join(DATA_DIR, 'history.jsonl')
+PIN_FILE = os.path.join(DATA_DIR, 'pin.txt')  # created by setup-gym.sh, chmod 600
 MAX_BODY = 200_000
+
+# global brute-force throttle: 30 failed PIN attempts per hour, then 429s.
+# Single legitimate user -> a lockout only ever inconveniences an attacker.
+_fail = {'count': 0, 'window': 0.0}
+
+
+def _throttled():
+    now = time.time()
+    if now - _fail['window'] > 3600:
+        _fail.update(count=0, window=now)
+    return _fail['count'] >= 30
+
+
+def _pin_ok(handler):
+    try:
+        with open(PIN_FILE) as f:  # read per-request so rotating the file just works
+            pin = f.read().strip()
+    except FileNotFoundError:
+        return False  # fail closed: no PIN file, no access
+    return bool(pin) and hmac.compare_digest(handler.headers.get('X-Gym-Pin', ''), pin)
 
 
 def entries():
@@ -36,14 +59,29 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def _auth(self):
+        if _throttled():
+            self._send(429, {'error': 'too many attempts, try later'})
+            return False
+        if not _pin_ok(self):
+            _fail['count'] += 1
+            time.sleep(0.5)
+            self._send(401, {'error': 'pin required'})
+            return False
+        return True
+
     def do_GET(self):
         if self.path.rstrip('/') == '/api/history':
+            if not self._auth():
+                return
             return self._send(200, entries())
         self._send(404, {'error': 'not found'})
 
     def do_POST(self):
         if self.path.rstrip('/') != '/api/history':
             return self._send(404, {'error': 'not found'})
+        if not self._auth():
+            return
         n = int(self.headers.get('Content-Length', 0))
         if n <= 0 or n > MAX_BODY:
             return self._send(413, {'error': 'bad size'})

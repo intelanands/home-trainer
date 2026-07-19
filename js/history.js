@@ -26,12 +26,16 @@ const History = {
     this.sync();
   },
 
-  /* 'ok' | 'offline' | 'blocked'. 'blocked' = online but the server did not
-     genuinely confirm (down, or an auth wall like Cloudflare Access is
-     intercepting) — the UI shows a sign-in banner for it. Only a real
-     {ok:true} JSON reply marks an entry synced; a login page served with
-     HTTP 200 must never count. */
+  /* 'ok' | 'offline' | 'blocked' | 'pin'.
+     'pin'     = server wants the PIN (401/429) — UI asks for it, once per device.
+     'blocked' = online but no genuine confirmation (server down or an auth
+                 wall answering with something that isn't our API).
+     Only a real {ok:true} JSON reply marks an entry synced; a login page
+     served with HTTP 200 must never count. */
   lastSyncStatus: 'ok',
+  PIN_KEY: 'trainer.pin',
+
+  setPin(v) { localStorage.setItem(this.PIN_KEY, String(v).trim()); },
 
   async sync() {
     const list = this.all();
@@ -40,9 +44,13 @@ const History = {
       try {
         const res = await fetch('./api/history', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Gym-Pin': localStorage.getItem(this.PIN_KEY) || '',
+          },
           body: JSON.stringify(entry),
         });
+        if (res.status === 401 || res.status === 429) { status = 'pin'; break; }
         const data = res.ok && !res.redirected ? await res.json().catch(() => null) : null;
         if (data?.ok !== true) throw new Error('no server confirmation');
         entry.synced = true;

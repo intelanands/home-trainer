@@ -241,13 +241,18 @@ body { min-height: 100vh; min-height: 100dvh; }
 
 .sync-banner {
   display: block;
+  width: 100%;
   background: #7c2d12;
   color: #fed7aa;
   padding: 12px 14px;
+  border: none;
   border-radius: 12px;
   margin-bottom: 14px;
   text-decoration: none;
+  text-align: left;
   font-size: 0.95rem;
+  font-family: inherit;
+  cursor: pointer;
 }
 
 .feel-block { margin: 14px 0 4px; }
