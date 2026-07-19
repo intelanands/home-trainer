@@ -2,24 +2,23 @@
    All values interpolated into innerHTML templates are escaped via esc()
    (defined in player.js), including user-entered history notes. */
 
-const APP_VERSION = 'v13'; // keep in sync with VERSION in sw.js
+const APP_VERSION = 'v14'; // cosmetic (footer display) — every load is fresh from the server now
 
 const App = {
   plan: null,
   exercisesById: {},
 
   async init() {
-    // Launch gate: the cached shell always opens (that's offline-first
-    // working as designed), so when online, actively verify the session and
-    // bounce to the login page if the server says we're signed out. Offline
-    // or server-down launches proceed — the wall still guards all data.
-    try {
-      const auth = await fetch('./api/auth', { cache: 'no-store' });
-      if (auth.status === 401 || auth.status === 429) {
-        location.replace('./login.html');
-        return;
-      }
-    } catch (e) { /* offline — run from cache */ }
+    // The service worker is retired: offline-first caching caused every
+    // update/auth headache this app had. Scrub any leftover registration
+    // and caches from older versions (sw.js itself is a kill switch too).
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations()
+        .then(regs => regs.forEach(r => r.unregister())).catch(() => {});
+    }
+    if (window.caches) {
+      caches.keys().then(keys => keys.forEach(k => caches.delete(k))).catch(() => {});
+    }
 
     try {
       const [plan, exercises] = await Promise.all([
@@ -45,21 +44,9 @@ const App = {
       setTimeout(() => { e.target.textContent = 'Copy to clipboard'; }, 1500);
     };
 
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js')
-        .then(reg => reg.update())
-        .catch(() => {});
-      // When a new service worker takes over, reload once so the fresh
-      // version applies immediately — no second-launch dance. Skip the very
-      // first install (no previous controller) and never reload mid-workout.
-      const hadController = !!navigator.serviceWorker.controller;
-      navigator.serviceWorker.addEventListener('controllerchange', () => {
-        if (!hadController || this._reloaded) return;
-        if (!document.getElementById('view-player').classList.contains('hidden')) return;
-        this._reloaded = true;
-        location.reload();
-      });
-    }
+    // A device with no local history (new phone, cleared storage) pulls it
+    // back from the server, so device resets are lossless.
+    await History.restoreFromServer();
 
     this.renderToday();
     this.show('today');

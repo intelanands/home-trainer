@@ -35,6 +35,21 @@ const History = {
      served with HTTP 200 must never count. */
   lastSyncStatus: 'ok',
 
+  /* If this device has no local history, pull the full log back from the
+     server — makes cleared storage and new phones lossless. */
+  async restoreFromServer() {
+    if (this.all().length) return;
+    try {
+      const res = await fetch('./api/history');
+      if (!res.ok || res.redirected) return;
+      const list = await res.json();
+      if (Array.isArray(list) && list.length) {
+        for (const entry of list) entry.synced = true;
+        this._save(list);
+      }
+    } catch (e) { /* offline or signed out — nothing to restore right now */ }
+  },
+
   async sync() {
     const list = this.all();
     let status = 'ok';
