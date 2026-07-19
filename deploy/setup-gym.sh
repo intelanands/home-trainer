@@ -75,14 +75,16 @@ sudo systemctl restart cloudflared
 sleep 3
 systemctl is-active cloudflared
 
-echo '=== 4/4 DNS route ==='
-if cloudflared tunnel route dns tally-portal gym.recat.in; then
-  echo 'DNS route created automatically.'
+echo '=== 4/4 DNS check ==='
+# DNS is a MANUAL record — the tunnel cert only covers catapharma.com, so
+# `cloudflared tunnel route dns` cannot manage the recat.in zone (running it
+# anyway creates a junk gym.recat.in.catapharma.com record — don't).
+if curl -s --max-time 10 https://gym.recat.in/ | grep -q 'Home Trainer'; then
+  echo 'gym.recat.in serves the app — DNS OK.'
 else
   TUNNEL_ID=$(cloudflared tunnel list 2>/dev/null | awk '/tally-portal/ {print $1}')
-  echo ''
-  echo '!!! Automatic DNS route failed (tunnel cert likely only covers catapharma.com).'
-  echo '!!! Add this record manually in the Cloudflare dashboard, zone recat.in:'
+  echo '!!! gym.recat.in does not serve the app yet.'
+  echo '!!! Add this record in the Cloudflare dashboard, zone recat.in:'
   echo "!!!   Type: CNAME | Name: gym | Target: ${TUNNEL_ID}.cfargotunnel.com | Proxy status: Proxied (orange cloud)"
 fi
 
