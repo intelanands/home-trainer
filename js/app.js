@@ -2,7 +2,7 @@
    All values interpolated into innerHTML templates are escaped via esc()
    (defined in player.js), including user-entered history notes. */
 
-const APP_VERSION = 'v10'; // keep in sync with VERSION in sw.js
+const APP_VERSION = 'v11'; // keep in sync with VERSION in sw.js
 
 const App = {
   plan: null,
@@ -21,6 +21,8 @@ const App = {
         'Could not load workout data. Check data/plan.json and data/exercises.json.';
       return;
     }
+
+    await this._ensureUnlocked();
 
     document.querySelectorAll('.nav-btn').forEach(btn => {
       btn.onclick = () => this.show(btn.dataset.nav);
@@ -54,6 +56,65 @@ const App = {
     // PIN or is blocked while online, surface the banner on the Today view
     History.sync().then(status => {
       if (status === 'pin' || status === 'blocked') this.renderToday();
+    });
+  },
+
+  /* Lock screen: a new device must enter the PIN once before the app opens.
+     The PIN is verified against the server (GET /api/history → 200) and then
+     stored for good. Offline or server-down launches are let through — the
+     server still guards all data, this gate is device convenience/privacy. */
+  async _ensureUnlocked() {
+    if (navigator.onLine === false) return;
+    const stored = localStorage.getItem(History.PIN_KEY);
+    if (stored != null && await this._pinValid(stored) !== false) return;
+    await this._lockScreen();
+  },
+
+  /* true = valid, false = rejected, null = could not verify (be permissive) */
+  async _pinValid(pin) {
+    try {
+      const res = await fetch('./api/history', { headers: { 'X-Gym-Pin': pin } });
+      if (res.status === 200) return true;
+      if (res.status === 401 || res.status === 429) return false;
+      return null;
+    } catch (e) {
+      return null;
+    }
+  },
+
+  _lockScreen() {
+    return new Promise(resolve => {
+      const overlay = document.createElement('div');
+      overlay.className = 'lock-screen';
+      overlay.innerHTML = `
+        <div class="lock-box">
+          <div class="big">🔒</div>
+          <h2>Home Trainer</h2>
+          <p>Enter your PIN to open the app on this device.</p>
+          <input id="lock-pin" type="password" inputmode="numeric" autocomplete="off" maxlength="12">
+          <div id="lock-err" class="lock-err"></div>
+          <button class="btn" id="lock-go">Unlock</button>
+        </div>`;
+      document.body.appendChild(overlay);
+      const input = overlay.querySelector('#lock-pin');
+      const err = overlay.querySelector('#lock-err');
+      const tryUnlock = async () => {
+        const v = input.value.trim();
+        if (!v) return;
+        err.textContent = '';
+        const valid = await this._pinValid(v);
+        if (valid === false) {
+          err.textContent = 'Wrong PIN — ask Claude if you lost it.';
+          input.value = '';
+          return;
+        }
+        History.setPin(v);
+        overlay.remove();
+        resolve();
+      };
+      overlay.querySelector('#lock-go').onclick = tryUnlock;
+      input.onkeydown = (e) => { if (e.key === 'Enter') tryUnlock(); };
+      input.focus();
     });
   },
 
