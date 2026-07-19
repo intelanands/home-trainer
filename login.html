@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#10151f">
+  <title>Home Trainer — Sign in</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #10151f; color: #e7ecf3; min-height: 100vh;
+      display: flex; align-items: center; justify-content: center; padding: 24px;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+    .box { text-align: center; width: 100%; max-width: 320px; }
+    .big { font-size: 3rem; margin-bottom: 8px; }
+    p { color: #8b98ab; margin: 10px 0 18px; }
+    input {
+      width: 100%; font-size: 1.6rem; text-align: center; letter-spacing: 0.4em;
+      padding: 12px; border-radius: 12px; border: 1px solid #2a3446;
+      background: #1a2232; color: #e7ecf3; margin-bottom: 8px;
+    }
+    .err { color: #fca5a5; font-size: 0.9rem; min-height: 1.4em; margin-bottom: 8px; }
+    button {
+      width: 100%; padding: 14px; font-size: 1.05rem; font-weight: 600;
+      background: #38bdf8; color: #0b1020; border: none; border-radius: 12px; cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <div class="big">🔒</div>
+    <h2>Home Trainer</h2>
+    <p>Enter your PIN to sign in on this device.</p>
+    <input id="pin" type="password" inputmode="numeric" autocomplete="off" maxlength="12" autofocus>
+    <div class="err" id="err"></div>
+    <button id="go">Sign in</button>
+  </div>
+  <script>
+    const input = document.getElementById('pin');
+    const err = document.getElementById('err');
+    async function signIn() {
+      const pin = input.value.trim();
+      if (!pin) return;
+      err.textContent = '';
+      try {
+        const res = await fetch('./api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pin }),
+        });
+        if (res.ok) { location.replace('./'); return; }
+        err.textContent = res.status === 429
+          ? 'Too many attempts — try again in an hour.'
+          : 'Wrong PIN — ask Claude if you lost it.';
+        input.value = '';
+      } catch (e) {
+        err.textContent = 'Could not reach the server — check your connection.';
+      }
+    }
+    document.getElementById('go').onclick = signIn;
+    input.onkeydown = (e) => { if (e.key === 'Enter') signIn(); };
+  </script>
+</body>
+</html>

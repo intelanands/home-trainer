@@ -2,7 +2,7 @@
    All values interpolated into innerHTML templates are escaped via esc()
    (defined in player.js), including user-entered history notes. */
 
-const APP_VERSION = 'v11'; // keep in sync with VERSION in sw.js
+const APP_VERSION = 'v12'; // keep in sync with VERSION in sw.js
 
 const App = {
   plan: null,
@@ -22,7 +22,6 @@ const App = {
       return;
     }
 
-    await this._ensureUnlocked();
 
     document.querySelectorAll('.nav-btn').forEach(btn => {
       btn.onclick = () => this.show(btn.dataset.nav);
@@ -59,91 +58,21 @@ const App = {
     });
   },
 
-  /* Lock screen: a new device must enter the PIN once before the app opens.
-     The PIN is verified against the server (GET /api/history → 200) and then
-     stored for good. Offline or server-down launches are let through — the
-     server still guards all data, this gate is device convenience/privacy. */
-  async _ensureUnlocked() {
-    if (navigator.onLine === false) return;
-    const stored = localStorage.getItem(History.PIN_KEY);
-    if (stored != null && await this._pinValid(stored) !== false) return;
-    await this._lockScreen();
-  },
-
-  /* true = valid, false = rejected, null = could not verify (be permissive) */
-  async _pinValid(pin) {
-    try {
-      const res = await fetch('./api/history', { headers: { 'X-Gym-Pin': pin } });
-      if (res.status === 200) return true;
-      if (res.status === 401 || res.status === 429) return false;
-      return null;
-    } catch (e) {
-      return null;
-    }
-  },
-
-  _lockScreen() {
-    return new Promise(resolve => {
-      const overlay = document.createElement('div');
-      overlay.className = 'lock-screen';
-      overlay.innerHTML = `
-        <div class="lock-box">
-          <div class="big">🔒</div>
-          <h2>Home Trainer</h2>
-          <p>Enter your PIN to open the app on this device.</p>
-          <input id="lock-pin" type="password" inputmode="numeric" autocomplete="off" maxlength="12">
-          <div id="lock-err" class="lock-err"></div>
-          <button class="btn" id="lock-go">Unlock</button>
-        </div>`;
-      document.body.appendChild(overlay);
-      const input = overlay.querySelector('#lock-pin');
-      const err = overlay.querySelector('#lock-err');
-      const tryUnlock = async () => {
-        const v = input.value.trim();
-        if (!v) return;
-        err.textContent = '';
-        const valid = await this._pinValid(v);
-        if (valid === false) {
-          err.textContent = 'Wrong PIN — ask Claude if you lost it.';
-          input.value = '';
-          return;
-        }
-        History.setPin(v);
-        overlay.remove();
-        resolve();
-      };
-      overlay.querySelector('#lock-go').onclick = tryUnlock;
-      input.onkeydown = (e) => { if (e.key === 'Enter') tryUnlock(); };
-      input.focus();
-    });
-  },
-
   /* './?signin=<ts>' busts the service-worker cache so the navigation truly
-     hits the network — which is what lets an auth wall run its login flow. */
+     hits the network — the nginx login wall then serves the sign-in page,
+     and the cookie it sets covers both the app and history sync. */
   _syncBannerHtml() {
     if (History.lastSyncStatus === 'pin') {
       return `
-        <button class="sync-banner" id="pin-banner">
-          🔑 Enter your PIN to sync workouts — tap here
-        </button>`;
+        <a class="sync-banner" href="./?signin=${Date.now()}">
+          🔑 Signed out — tap to sign in and sync workouts
+        </a>`;
     }
     if (History.lastSyncStatus !== 'blocked') return '';
     return `
       <a class="sync-banner" href="./?signin=${Date.now()}">
-        ⚠ Workout sync is blocked — tap to reconnect / sign in
+        ⚠ Workout sync is blocked — tap to reconnect
       </a>`;
-  },
-
-  _bindPinBanner(container) {
-    const banner = container.querySelector('#pin-banner');
-    if (!banner) return;
-    banner.onclick = async () => {
-      const v = prompt('Enter your Home Trainer PIN (ask Claude if you lost it):');
-      if (!v) return;
-      History.setPin(v);
-      await History.sync();
-      this.renderToday();
-    };
   },
 
   show(view) {
@@ -242,7 +171,6 @@ const App = {
     container.querySelectorAll('[data-start]').forEach(btn => {
       btn.onclick = () => this.startWorkout(btn.dataset.start);
     });
-    this._bindPinBanner(container);
   },
 
   startWorkout(sessionKey) {

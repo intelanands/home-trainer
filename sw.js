@@ -5,7 +5,7 @@
    - Exercise images: cache-first via runtime cache (immutable content).
    - data/*.json: network-first so plan updates from Claude arrive promptly. */
 
-const VERSION = 'v11';
+const VERSION = 'v12';
 const SHELL_CACHE = `trainer-shell-${VERSION}`;
 const RUNTIME_CACHE = 'trainer-runtime';
 
@@ -49,13 +49,15 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (e) => {
   const url = new URL(e.request.url);
   if (e.request.method !== 'GET' || url.origin !== location.origin) return;
-  if (url.pathname.includes('/api/')) return; // history sync — never cached
+  if (url.pathname.includes('/api/')) return; // history sync/auth — never cached
+  if (url.pathname.endsWith('/login.html')) return; // login wall page — never cached
 
-  // Only genuine same-origin 200s get cached. A redirect or an HTML body on
-  // a data/image path means an auth wall (e.g. Cloudflare Access) answered —
-  // caching that would poison the app with login pages.
+  // Only genuine same-origin 200s get cached. The nginx login wall serves
+  // login.html (marked X-Gym-Login) in place of ANY unauthenticated URL —
+  // caching that would poison the app shell/data with the login page.
   const cacheable = (res, wantJson) => {
     if (!res.ok || res.redirected) return false;
+    if (res.headers.get('X-Gym-Login')) return false;
     const type = res.headers.get('content-type') || '';
     if (wantJson) return type.includes('json');
     return !type.includes('text/html');

@@ -27,15 +27,13 @@ const History = {
   },
 
   /* 'ok' | 'offline' | 'blocked' | 'pin'.
-     'pin'     = server wants the PIN (401/429) — UI asks for it, once per device.
-     'blocked' = online but no genuine confirmation (server down or an auth
-                 wall answering with something that isn't our API).
+     'pin'     = signed out (401/429) — the UI links to the login page; the
+                 gympin cookie set there rides along on every fetch here.
+     'blocked' = online but no genuine confirmation (server down or something
+                 answering that isn't our API).
      Only a real {ok:true} JSON reply marks an entry synced; a login page
      served with HTTP 200 must never count. */
   lastSyncStatus: 'ok',
-  PIN_KEY: 'trainer.pin',
-
-  setPin(v) { localStorage.setItem(this.PIN_KEY, String(v).trim()); },
 
   async sync() {
     const list = this.all();
@@ -44,10 +42,7 @@ const History = {
       try {
         const res = await fetch('./api/history', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Gym-Pin': localStorage.getItem(this.PIN_KEY) || '',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(entry),
         });
         if (res.status === 401 || res.status === 429) { status = 'pin'; break; }

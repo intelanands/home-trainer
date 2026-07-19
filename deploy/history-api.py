@@ -9,6 +9,7 @@ Data lives in /opt/home-trainer-data/history.jsonl — one JSON object per
 line, OUTSIDE the repo checkout so `git pull` deploys never touch it.
 """
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from http.cookies import SimpleCookie
 import hmac
 import json
 import os
@@ -31,13 +32,26 @@ def _throttled():
     return _fail['count'] >= 30
 
 
-def _pin_ok(handler):
+def _stored_pin():
     try:
         with open(PIN_FILE) as f:  # read per-request so rotating the file just works
-            pin = f.read().strip()
+            return f.read().strip()
     except FileNotFoundError:
-        return False  # fail closed: no PIN file, no access
-    return bool(pin) and hmac.compare_digest(handler.headers.get('X-Gym-Pin', ''), pin)
+        return ''  # fail closed: no PIN file, no access
+
+
+def _supplied_pin(handler):
+    """PIN from the X-Gym-Pin header or the gympin cookie (set by /api/login)."""
+    header = handler.headers.get('X-Gym-Pin', '')
+    if header:
+        return header
+    cookie = SimpleCookie(handler.headers.get('Cookie', ''))
+    return cookie['gympin'].value if 'gympin' in cookie else ''
+
+
+def _pin_valid(supplied):
+    pin = _stored_pin()
+    return bool(pin) and hmac.compare_digest(supplied, pin)
 
 
 def entries():
@@ -51,34 +65,73 @@ class Handler(BaseHTTPRequestHandler):
     def log_message(self, *args):
         pass
 
-    def _send(self, code, obj):
+    def _send(self, code, obj, extra_headers=None):
         body = json.dumps(obj).encode()
         self.send_response(code)
         self.send_header('Content-Type', 'application/json')
         self.send_header('Content-Length', str(len(body)))
+        for k, v in (extra_headers or {}).items():
+            self.send_header(k, v)
         self.end_headers()
         self.wfile.write(body)
 
     def _auth(self):
+        """A valid PIN always passes (never throttled). An absent PIN is a
+        plain 401 that does NOT count as a failure — every logged-out page
+        visit hits /api/auth and must not be able to lock the real user out.
+        Only actual wrong guesses feed the throttle."""
+        supplied = _supplied_pin(self)
+        if _pin_valid(supplied):
+            return True
+        if not supplied:
+            self._send(401, {'error': 'pin required'})
+            return False
         if _throttled():
             self._send(429, {'error': 'too many attempts, try later'})
             return False
-        if not _pin_ok(self):
-            _fail['count'] += 1
-            time.sleep(0.5)
-            self._send(401, {'error': 'pin required'})
-            return False
-        return True
+        _fail['count'] += 1
+        time.sleep(0.5)
+        self._send(401, {'error': 'wrong pin'})
+        return False
 
     def do_GET(self):
-        if self.path.rstrip('/') == '/api/history':
+        path = self.path.split('?')[0].rstrip('/')
+        if path == '/api/auth':
+            # nginx auth_request gate: 200 lets the original request through
+            if self._auth():
+                self._send(200, {'ok': True})
+            return
+        if path == '/api/history':
             if not self._auth():
                 return
             return self._send(200, entries())
         self._send(404, {'error': 'not found'})
 
+    def _do_login(self):
+        n = int(self.headers.get('Content-Length', 0))
+        if n <= 0 or n > 1000:
+            return self._send(400, {'error': 'bad size'})
+        try:
+            pin = str(json.loads(self.rfile.read(n)).get('pin', '')).strip()
+        except (ValueError, json.JSONDecodeError, AttributeError):
+            return self._send(400, {'error': 'invalid request'})
+        if not pin:
+            return self._send(401, {'error': 'pin required'})
+        if _throttled():
+            return self._send(429, {'error': 'too many attempts, try later'})
+        if not _pin_valid(pin):
+            _fail['count'] += 1
+            time.sleep(0.5)
+            return self._send(401, {'error': 'wrong pin'})
+        # ~180 days; HttpOnly so page JS never sees it, Secure for HTTPS-only
+        cookie = f'gympin={pin}; Max-Age=15552000; Path=/; HttpOnly; Secure; SameSite=Lax'
+        self._send(200, {'ok': True}, {'Set-Cookie': cookie})
+
     def do_POST(self):
-        if self.path.rstrip('/') != '/api/history':
+        path = self.path.split('?')[0].rstrip('/')
+        if path == '/api/login':
+            return self._do_login()
+        if path != '/api/history':
             return self._send(404, {'error': 'not found'})
         if not self._auth():
             return
