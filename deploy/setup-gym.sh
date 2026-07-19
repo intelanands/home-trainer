@@ -99,6 +99,19 @@ server {
         proxy_pass http://127.0.0.1:8091;
     }
 
+    # PWA install metadata must be public: Chrome fetches the manifest and
+    # icons WITHOUT the login cookie when deciding installability — behind
+    # the wall it sees the login page and downgrades install to a plain
+    # shortcut. Name + icons only; nothing sensitive.
+    location = /manifest.json {
+        auth_request off;
+        add_header Cache-Control "no-store";
+    }
+    location ~ ^/img/icon {
+        auth_request off;
+        add_header Cache-Control "public, max-age=86400";
+    }
+
     # Self-guards with the PIN; auth_request off keeps its JSON 401s intact
     # (error_page must not rewrite API errors into login HTML).
     location = /api/history {
