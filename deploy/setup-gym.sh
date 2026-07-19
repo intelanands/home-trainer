@@ -22,6 +22,10 @@ if [ ! -f /opt/home-trainer-data/pin.txt ]; then
   echo "Generated new API PIN (the login page asks for it once per device)."
 fi
 chmod 600 /opt/home-trainer-data/pin.txt
+if [ ! -f /opt/home-trainer-data/session-gen.txt ]; then
+  date +%s%N > /opt/home-trainer-data/session-gen.txt
+fi
+chmod 600 /opt/home-trainer-data/session-gen.txt
 sudo cp /opt/home-trainer/deploy/home-trainer-api.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable --now home-trainer-api

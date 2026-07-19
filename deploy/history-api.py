@@ -10,6 +10,7 @@ line, OUTSIDE the repo checkout so `git pull` deploys never touch it.
 """
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from http.cookies import SimpleCookie
+import hashlib
 import hmac
 import json
 import os
@@ -18,6 +19,7 @@ import time
 DATA_DIR = '/opt/home-trainer-data'
 FILE = os.path.join(DATA_DIR, 'history.jsonl')
 PIN_FILE = os.path.join(DATA_DIR, 'pin.txt')  # created by setup-gym.sh, chmod 600
+GEN_FILE = os.path.join(DATA_DIR, 'session-gen.txt')  # bump to sign out every device
 MAX_BODY = 200_000
 
 # global brute-force throttle: 30 failed PIN attempts per hour, then 429s.
@@ -40,18 +42,29 @@ def _stored_pin():
         return ''  # fail closed: no PIN file, no access
 
 
-def _supplied_pin(handler):
-    """PIN from the X-Gym-Pin header or the gympin cookie (set by /api/login)."""
-    header = handler.headers.get('X-Gym-Pin', '')
-    if header:
-        return header
-    cookie = SimpleCookie(handler.headers.get('Cookie', ''))
-    return cookie['gympin'].value if 'gympin' in cookie else ''
+def _session_gen():
+    try:
+        with open(GEN_FILE) as f:
+            return f.read().strip()
+    except FileNotFoundError:
+        return '0'
+
+
+def _session_token():
+    """The cookie holds this hash, NOT the PIN. Rewriting session-gen.txt
+    invalidates every issued cookie at once (sign out everywhere) without
+    changing the PIN."""
+    return hashlib.sha256(f'{_stored_pin()}:{_session_gen()}'.encode()).hexdigest()
 
 
 def _pin_valid(supplied):
     pin = _stored_pin()
     return bool(pin) and hmac.compare_digest(supplied, pin)
+
+
+def _cookie_token(handler):
+    cookie = SimpleCookie(handler.headers.get('Cookie', ''))
+    return cookie['gymtok'].value if 'gymtok' in cookie else ''
 
 
 def entries():
@@ -76,22 +89,28 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(body)
 
     def _auth(self):
-        """A valid PIN always passes (never throttled). An absent PIN is a
-        plain 401 that does NOT count as a failure — every logged-out page
-        visit hits /api/auth and must not be able to lock the real user out.
-        Only actual wrong guesses feed the throttle."""
-        supplied = _supplied_pin(self)
-        if _pin_valid(supplied):
+        """Valid credentials always pass (never throttled). Only wrong
+        X-Gym-Pin header guesses feed the throttle: an absent PIN must not
+        count (every logged-out page visit hits /api/auth), and a stale
+        cookie token must not count either — after a sign-out-everywhere,
+        old devices retry their dead token on every request and must not be
+        able to lock the real user out. Tokens are 256-bit hashes; guessing
+        them over HTTP is hopeless with or without a throttle."""
+        header_pin = self.headers.get('X-Gym-Pin', '')
+        if header_pin:
+            if _pin_valid(header_pin):
+                return True
+            if _throttled():
+                self._send(429, {'error': 'too many attempts, try later'})
+                return False
+            _fail['count'] += 1
+            time.sleep(0.5)
+            self._send(401, {'error': 'wrong pin'})
+            return False
+        token = _cookie_token(self)
+        if token and hmac.compare_digest(token, _session_token()):
             return True
-        if not supplied:
-            self._send(401, {'error': 'pin required'})
-            return False
-        if _throttled():
-            self._send(429, {'error': 'too many attempts, try later'})
-            return False
-        _fail['count'] += 1
-        time.sleep(0.5)
-        self._send(401, {'error': 'wrong pin'})
+        self._send(401, {'error': 'sign in required'})
         return False
 
     def do_GET(self):
@@ -123,8 +142,9 @@ class Handler(BaseHTTPRequestHandler):
             _fail['count'] += 1
             time.sleep(0.5)
             return self._send(401, {'error': 'wrong pin'})
-        # ~180 days; HttpOnly so page JS never sees it, Secure for HTTPS-only
-        cookie = f'gympin={pin}; Max-Age=15552000; Path=/; HttpOnly; Secure; SameSite=Lax'
+        # ~180 days; HttpOnly so page JS never sees it, Secure for HTTPS-only.
+        # The value is a session token, not the PIN — see _session_token().
+        cookie = f'gymtok={_session_token()}; Max-Age=15552000; Path=/; HttpOnly; Secure; SameSite=Lax'
         self._send(200, {'ok': True}, {'Set-Cookie': cookie})
 
     def do_POST(self):
