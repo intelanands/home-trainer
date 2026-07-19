@@ -19,6 +19,7 @@ Updates are live immediately (nginx sends `Cache-Control: no-cache` for app file
 - Cloudflare Tunnel ingress: `gym.recat.in → localhost:80` in `/etc/cloudflared/config.yml` (tunnel `tally-portal`, id 410a8965…). DNS is a manual CNAME in the recat.in zone → `<tunnel-id>.cfargotunnel.com` (the tunnel cert only covers catapharma.com, so `cloudflared tunnel route dns` cannot manage recat.in)
 - Full recreation: run `deploy/setup-gym.sh` on the server
 - GitHub Pages hosting was retired in July 2026 (repo remains the source of truth)
+- **Auth**: gym.recat.in is (or will be) behind Cloudflare Access — only the user's Google email is allowed; sessions last ~30 days. Consequence for verification: external `curl https://gym.recat.in/...` returns a 302 to cloudflareaccess.com, NOT the app — verify deploys server-side instead (`curl -H 'Host: gym.recat.in' http://localhost/...` over ssh). The app tolerates an expired session: SW never caches login pages, sync only trusts `{ok:true}`, and the Today view shows a tap-to-sign-in banner.
 
 ## ⚠️ Shared server — rules learned the hard way
 
