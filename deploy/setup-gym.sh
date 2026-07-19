@@ -85,10 +85,11 @@ echo '=== 4/5 History API service ==='
 sudo mkdir -p /opt/home-trainer-data
 sudo chown administrator:administrator /opt/home-trainer-data
 if [ ! -f /opt/home-trainer-data/pin.txt ]; then
-  tr -dc 0-9 < /dev/urandom | head -c 6 > /opt/home-trainer-data/pin.txt
-  chmod 600 /opt/home-trainer-data/pin.txt
-  echo "Generated new API PIN (the app asks for it once per device): $(cat /opt/home-trainer-data/pin.txt)"
+  # no pipes here: `tr </dev/urandom | head` dies of SIGPIPE under pipefail
+  printf '%06d' "$(( ($(od -An -N4 -tu4 /dev/urandom | tr -d ' ')) % 1000000 ))" > /opt/home-trainer-data/pin.txt
+  echo "Generated new API PIN (the app asks for it once per device)."
 fi
+chmod 600 /opt/home-trainer-data/pin.txt
 sudo cp /opt/home-trainer/deploy/home-trainer-api.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable --now home-trainer-api
