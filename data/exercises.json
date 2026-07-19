@@ -1098,5 +1098,25 @@
       "img/exercises/Inchworm/0.jpg",
       "img/exercises/Inchworm/1.jpg"
     ]
+  },
+  {
+    "id": "Side_Leg_Raises",
+    "name": "Side Leg Raises",
+    "level": "beginner",
+    "equipment": "body only",
+    "category": "stretching",
+    "primaryMuscles": [
+      "adductors"
+    ],
+    "secondaryMuscles": [],
+    "instructions": [
+      "Stand next to a chair, which you may hold onto as a support. Stand on one leg. This will be your starting position.",
+      "Keeping your leg straight, raise it as far out to the side as possible, and swing it back down, allowing it to cross the opposite leg.",
+      "Repeat this swinging motion 5-10 times, increasing the range of motion as you do so."
+    ],
+    "images": [
+      "img/exercises/Side_Leg_Raises/0.jpg",
+      "img/exercises/Side_Leg_Raises/1.jpg"
+    ]
   }
 ]

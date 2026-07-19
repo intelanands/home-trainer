@@ -1,7 +1,7 @@
 {
   "athlete": {
     "equipment": ["2x dumbbells up to 10kg", "yoga mat", "stairs", "chair", "bench-like furniture"],
-    "notes": "Home training. Weights are per dumbbell. Adjust in chat with Claude anytime."
+    "notes": "Home training. Weights are per dumbbell. Adjust in chat with Claude anytime. Left knee: mild discomfort on twists (noted Jul 2026) — knee work stays in pain-free range, no knee caving inward, no loaded twisting."
   },
   "schedule": {
     "mon": "full-body-a",
@@ -19,7 +19,8 @@
       "blocks": [
         { "exerciseId": "Inchworm", "sets": 2, "reps": 8, "restSec": 30, "note": "Warm-up, go slow" },
         { "exerciseId": "Bodyweight_Squat", "sets": 2, "reps": 15, "restSec": 45, "note": "Warm-up pace" },
-        { "exerciseId": "Dumbbell_Squat", "sets": 3, "reps": 12, "weightKg": 8, "restSec": 75 },
+        { "exerciseId": "Dumbbell_Squat", "sets": 3, "reps": 12, "weightKg": 8, "restSec": 75, "note": "Knees track over toes, pain-free depth only" },
+        { "exerciseId": "Single_Leg_Glute_Bridge", "sets": 2, "reps": 10, "restSec": 45, "note": "Per leg — knee stability work, squeeze glute at top" },
         { "exerciseId": "Pushups", "sets": 3, "reps": 10, "restSec": 75, "note": "Knees down if needed" },
         { "exerciseId": "One-Arm_Dumbbell_Row", "sets": 3, "reps": 12, "weightKg": 10, "restSec": 60, "note": "Per arm, brace on chair" },
         { "exerciseId": "Standing_Dumbbell_Press", "sets": 3, "reps": 10, "weightKg": 6, "restSec": 75 },
@@ -32,12 +33,13 @@
       "equipment": ["Yoga mat", "Sturdy chair (for bench dips)", "Water bottle"],
       "blocks": [
         { "exerciseId": "Inchworm", "sets": 2, "reps": 8, "restSec": 30, "note": "Warm-up, go slow" },
-        { "exerciseId": "Dumbbell_Lunges", "sets": 3, "reps": 10, "weightKg": 6, "restSec": 75, "note": "10 per leg" },
+        { "exerciseId": "Dumbbell_Rear_Lunge", "sets": 3, "reps": 10, "weightKg": 6, "restSec": 75, "note": "10 per leg — step BACK (easier on knees), front shin stays vertical" },
+        { "exerciseId": "Side_Leg_Raises", "sets": 2, "reps": 12, "restSec": 45, "note": "Per side, slow — side-glute work that steadies the knee" },
         { "exerciseId": "Dumbbell_Floor_Press", "sets": 3, "reps": 12, "weightKg": 8, "restSec": 75, "note": "On the mat" },
         { "exerciseId": "Bent_Over_Two-Dumbbell_Row", "sets": 3, "reps": 12, "weightKg": 8, "restSec": 75, "note": "Flat back" },
         { "exerciseId": "Side_Lateral_Raise", "sets": 3, "reps": 12, "weightKg": 4, "restSec": 60, "note": "Light weight, strict form" },
         { "exerciseId": "Bench_Dips", "sets": 3, "reps": 10, "restSec": 60, "note": "Use a sturdy chair" },
-        { "exerciseId": "Russian_Twist", "sets": 3, "reps": 20, "restSec": 45, "note": "10 per side" },
+        { "exerciseId": "Russian_Twist", "sets": 3, "reps": 20, "restSec": 45, "note": "10 per side — rotate from the torso, knees stay still" },
         { "exerciseId": "All_Fours_Quad_Stretch", "sets": 2, "durationSec": 30, "restSec": 15, "note": "Cooldown, one set per leg" }
       ]
     },
@@ -46,12 +48,13 @@
       "equipment": ["Yoga mat", "Clear space at the bottom stair (step-ups)", "Chair or bench (seated press)", "Water bottle"],
       "blocks": [
         { "exerciseId": "Inchworm", "sets": 2, "reps": 8, "restSec": 30, "note": "Warm-up, go slow" },
-        { "exerciseId": "Dumbbell_Step_Ups", "sets": 3, "reps": 10, "weightKg": 6, "restSec": 75, "note": "Use bottom stair, 10 per leg" },
+        { "exerciseId": "Dumbbell_Step_Ups", "sets": 3, "reps": 10, "weightKg": 6, "restSec": 75, "note": "Use bottom stair, 10 per leg — push through the heel, knee over toes" },
         { "exerciseId": "Stiff-Legged_Dumbbell_Deadlift", "sets": 3, "reps": 12, "weightKg": 10, "restSec": 75, "note": "Hinge at hips, soft knees" },
         { "exerciseId": "Push-Up_Wide", "sets": 3, "reps": 10, "restSec": 75 },
         { "exerciseId": "Seated_Dumbbell_Press", "sets": 3, "reps": 10, "weightKg": 6, "restSec": 75, "note": "Sit on chair or bench" },
         { "exerciseId": "Dumbbell_Bicep_Curl", "sets": 2, "reps": 12, "weightKg": 6, "restSec": 60 },
         { "exerciseId": "Tricep_Dumbbell_Kickback", "sets": 2, "reps": 12, "weightKg": 4, "restSec": 60 },
+        { "exerciseId": "Standing_Dumbbell_Calf_Raise", "sets": 2, "reps": 15, "weightKg": 8, "restSec": 45, "note": "Slow down-phase — calf/ankle stability supports the knee" },
         { "exerciseId": "Dead_Bug", "sets": 3, "reps": 10, "restSec": 45, "note": "Slow and controlled" },
         { "exerciseId": "Side_Bridge", "sets": 2, "durationSec": 30, "restSec": 30, "note": "One set per side" }
       ]
