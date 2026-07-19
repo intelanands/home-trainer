@@ -13,6 +13,21 @@ else
 fi
 
 echo '=== 2/4 Nginx site (graceful reload, no portal downtime) ==='
+
+# SAFETY (incident, July 2026): this box's nginx serves multiple sites on :80.
+# The ERP site uses `server_name _`, which matches NOTHING — it only receives
+# traffic as the DEFAULT server. nginx picks the default implicitly as the
+# first-loaded block (sites-enabled is read alphabetically, "home-trainer"
+# sorts first!), so adding this site once hijacked portal.catapharma.com and
+# every other hostname. The ERP site must carry an explicit `default_server`
+# flag BEFORE this site is enabled. Verify, don't assume:
+if ! grep -qsE 'listen[^;]*default_server' /etc/nginx/sites-enabled/* ; then
+  echo 'ABORT: no enabled nginx site has an explicit default_server on :80.'
+  echo 'Add it to the ERP site first, e.g. in /etc/nginx/sites-available/tally-connector:'
+  echo '    listen 80 default_server;'
+  echo 'Otherwise this site becomes the implicit default and hijacks all hostnames.'
+  exit 1
+fi
 sudo tee /etc/nginx/sites-available/home-trainer > /dev/null << 'EOF'
 server {
     listen 80;
@@ -37,8 +52,18 @@ EOF
 sudo ln -sf /etc/nginx/sites-available/home-trainer /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl reload nginx
-# Sanity check: nginx answers for the new hostname locally
-curl -s -o /dev/null -w 'local nginx check: %{http_code}\n' -H 'Host: gym.recat.in' http://localhost/
+sleep 1
+
+# Regression check EVERY co-hosted hostname, not just the new one — the
+# July 2026 incident shipped because only gym.recat.in was tested.
+check() {  # check <host> <expected_code>
+  code=$(curl -s -o /dev/null -w '%{http_code}' -H "Host: $1" http://localhost/)
+  printf '%-26s -> %s (want %s)\n' "$1" "$code" "$2"
+  [ "$code" = "$2" ]
+}
+check gym.recat.in          200   # the trainer (static index)
+check portal.catapharma.com 302   # ERP redirects to /login
+check unknown.example.com   302   # unmatched hosts must fall to the ERP default, NOT the trainer
 
 echo '=== 3/4 Cloudflare tunnel ingress (brief blip on all tunnel subdomains) ==='
 if ! sudo grep -q 'gym\.recat\.in' /etc/cloudflared/config.yml; then

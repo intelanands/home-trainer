@@ -20,6 +20,18 @@ Updates are live immediately (nginx sends `Cache-Control: no-cache` for app file
 - Full recreation: run `deploy/setup-gym.sh` on the server
 - GitHub Pages hosting was retired in July 2026 (repo remains the source of truth)
 
+## ⚠️ Shared server — rules learned the hard way
+
+The gym app is a **guest** on the production ERP box. It shares nginx (:80) and the Cloudflare tunnel with `portal.catapharma.com`, `test.catapharma.com`, and the Docker sidecars (status/errors/pass subdomains).
+
+**July 2026 incident:** enabling the gym's nginx site made *every* catapharma.com URL serve the gym app. Cause: the ERP site uses `server_name _` (matches nothing — it worked only as the implicit default server), and nginx picks the implicit default alphabetically — `home-trainer` sorts before `tally-connector`, so the gym silently became the default for all unmatched hostnames. Fixed by adding `default_server` to the ERP site's `listen` directive on the live server. `setup-gym.sh` now aborts if no other site holds `default_server`, and regression-tests portal + unknown hostnames after any reload.
+
+Rules for any future server-side change:
+1. **Never take `default_server`.** The gym site must only ever match `server_name gym.recat.in` exactly.
+2. **After touching nginx or the tunnel, regression-test the co-hosted sites** (`portal.catapharma.com` expects 302 to /login; an unknown Host must also hit the ERP, not the gym) — not just the site you changed.
+3. The tunnel ingress file (`/etc/cloudflared/config.yml`) is first-match and shared — add/remove only the `gym.recat.in` entry, keep it above the trailing `http_status:404` fallback, and remember a cloudflared restart briefly blips ALL subdomains.
+4. The ERP repo's `deploy/nginx.conf` template is the rebuild source for the ERP site — it must keep `default_server` (PR'd in July 2026); if a rebuilt server ever loses it, `setup-gym.sh`'s guard will catch it.
+
 ## plan.json contract
 
 - `schedule`: weekday keys `mon`..`sun` → session key or `"rest"`
