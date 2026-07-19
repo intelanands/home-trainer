@@ -1,6 +1,11 @@
 /* Workout player: steps through blocks/sets, runs timers, records results.
    Rendered content comes from the repo's own plan.json / exercises.json,
-   but everything interpolated into markup is escaped anyway via esc(). */
+   but everything interpolated into markup is escaped anyway via esc().
+
+   Blocks that share a `group` value (and are adjacent in the plan) run as a
+   SUPERSET: their sets interleave round-robin (A1 set1, A2 set1, A1 set2 …)
+   so one muscle rests while the other works. The whole session is
+   precomputed into `steps` = [{b, s, lastOfBlock}]. */
 
 function esc(v) {
   return String(v ?? '').replace(/[&<>"']/g, c => ({
@@ -13,8 +18,8 @@ const Player = {
   session: null,
   sessionKey: null,
   exercises: null,   // id -> exercise
-  blockIndex: 0,
-  setIndex: 0,
+  steps: [],
+  stepIndex: 0,
   results: [],
   startedAt: null,
   onExit: null,
@@ -26,8 +31,8 @@ const Player = {
     this.sessionKey = sessionKey;
     this.session = session;
     this.exercises = exercisesById;
-    this.blockIndex = 0;
-    this.setIndex = 0;
+    this.steps = this._buildSteps();
+    this.stepIndex = 0;
     this.results = session.blocks.map(b => ({
       exerciseId: b.exerciseId,
       name: exercisesById[b.exerciseId]?.name || b.exerciseId,
@@ -39,6 +44,37 @@ const Player = {
     Sound.ensure(); // unlock audio inside the user gesture that started the workout
     this.showReadyCheck();
   },
+
+  _buildSteps() {
+    const blocks = this.session.blocks;
+    const steps = [];
+    let i = 0;
+    while (i < blocks.length) {
+      const g = blocks[i].group;
+      let j = i + 1;
+      while (g != null && j < blocks.length && blocks[j].group === g) j++;
+      const members = [];
+      for (let k = i; k < j; k++) members.push(k);
+      const maxSets = Math.max(...members.map(k => blocks[k].sets));
+      for (let s = 0; s < maxSets; s++) {
+        for (const k of members) {
+          if (s < blocks[k].sets) steps.push({ b: k, s });
+        }
+      }
+      i = j;
+    }
+    const lastStepFor = {};
+    steps.forEach((st, idx) => { lastStepFor[st.b] = idx; });
+    steps.forEach((st, idx) => { st.lastOfBlock = lastStepFor[st.b] === idx; });
+    return steps;
+  },
+
+  step() { return this.steps[this.stepIndex]; },
+  block() { return this.session.blocks[this.step().b]; },
+  exercise() { return this.exercises[this.block().exerciseId] || null; },
+
+  totalSets() { return this.steps.length; },
+  doneSets() { return this.stepIndex; },
 
   /* Equipment needed for this session: dumbbell weights are derived from the
      blocks; everything else comes from session.equipment in plan.json. */
@@ -95,18 +131,6 @@ const Player = {
     this.onExit?.();
   },
 
-  block() { return this.session.blocks[this.blockIndex]; },
-  exercise() { return this.exercises[this.block().exerciseId] || null; },
-
-  totalSets() {
-    return this.session.blocks.reduce((n, b) => n + b.sets, 0);
-  },
-  doneSets() {
-    let n = 0;
-    for (let i = 0; i < this.blockIndex; i++) n += this.session.blocks[i].sets;
-    return n + this.setIndex;
-  },
-
   _header(label) {
     return `
       <div class="player-top">
@@ -151,6 +175,7 @@ const Player = {
 
   showExercise() {
     this._cleanupScreen();
+    const st = this.step();
     const b = this.block();
     const ex = this.exercise();
     const isTimed = b.durationSec != null;
@@ -158,9 +183,10 @@ const Player = {
     // of a near-identical pose reads as flicker. block.animate overrides.
     const animate = b.animate ?? !isTimed;
     // Still frames must show the HELD pose: photo 0 is the rest/start
-    // position, photo 1 the working position (user-reported bug).
+    // position, photo 1 the working position.
     const img = (!animate && ex?.images?.[1]) || ex?.images?.[0] || '';
     const muscles = ex ? ex.primaryMuscles.join(', ') : '';
+    const pairInfo = b.group ? ' · superset' : '';
 
     this.root.innerHTML = `
       ${this._header(this.session.title)}
@@ -168,7 +194,7 @@ const Player = {
         <h2>${esc(ex?.name || b.exerciseId)}</h2>
         <div class="muscles">${esc(muscles)}</div>
         <img id="p-img" class="anim-frame" src="${esc(img)}" alt="${esc(ex?.name || '')}">
-        <div class="set-info">Set ${this.setIndex + 1} of ${b.sets}</div>
+        <div class="set-info">Set ${st.s + 1} of ${b.sets}${pairInfo}</div>
         ${b.note ? `<div class="set-note">${esc(b.note)}</div>` : ''}
         ${isTimed ? `
           <div id="p-timer" class="timer-display working">${this._fmt(b.durationSec)}</div>
@@ -201,7 +227,7 @@ const Player = {
 
     this._bindQuit();
     if (animate) this._startAnim(document.getElementById('p-img'), ex?.images);
-    document.getElementById('p-skip').onclick = () => this._nextBlock();
+    document.getElementById('p-skip').onclick = () => this._skipBlock();
 
     if (isTimed) {
       const timerEl = document.getElementById('p-timer');
@@ -236,36 +262,50 @@ const Player = {
 
   _completeSet(setResult) {
     this._cleanupScreen();
-    this.results[this.blockIndex].sets.push(setResult);
-    this.setIndex += 1;
+    const st = this.step();
     const b = this.block();
-    const lastSetOfBlock = this.setIndex >= b.sets;
-    const lastBlock = this.blockIndex >= this.session.blocks.length - 1;
-
-    if (lastSetOfBlock && lastBlock) return this.showDone();
-    this.showRest(b.restSec || 60, lastSetOfBlock);
+    this.results[st.b].sets.push(setResult);
+    const feelFor = st.lastOfBlock ? st.b : null;
+    this.stepIndex += 1;
+    if (this.stepIndex >= this.steps.length) return this.showDone();
+    this.showRest(b.restSec || 60, feelFor);
   },
 
-  _nextBlock() {
+  _skipBlock() {
     this._cleanupScreen();
-    this.blockIndex += 1;
-    this.setIndex = 0;
-    if (this.blockIndex >= this.session.blocks.length) return this.showDone();
+    const skipB = this.step().b;
+    this.steps = this.steps.filter((st, idx) => idx < this.stepIndex || st.b !== skipB);
+    // re-mark lastOfBlock (the skipped block's earlier flag may have moved)
+    const lastStepFor = {};
+    this.steps.forEach((st, idx) => { lastStepFor[st.b] = idx; });
+    this.steps.forEach((st, idx) => { st.lastOfBlock = lastStepFor[st.b] === idx; });
+    if (this.stepIndex >= this.steps.length) return this.showDone();
     this.showExercise();
   },
 
-  showRest(seconds, advanceBlock) {
-    const nextBlock = advanceBlock ? this.session.blocks[this.blockIndex + 1] : this.block();
+  /* feelFor: block index to rate ("how did that exercise feel?"), shown after
+     an exercise's final set. One tap, optional — feeds weight progression. */
+  showRest(seconds, feelFor) {
+    const next = this.step();
+    const nextBlock = this.session.blocks[next.b];
     const nextEx = this.exercises[nextBlock.exerciseId];
-    const nextLabel = advanceBlock
-      ? `Next: ${nextEx?.name || nextBlock.exerciseId}`
-      : `Next: set ${this.setIndex + 1} of ${nextBlock.sets} — ${nextEx?.name || nextBlock.exerciseId}`;
+    const nextLabel = `Next: set ${next.s + 1} of ${nextBlock.sets} — ${nextEx?.name || nextBlock.exerciseId}`;
+    const feelName = feelFor != null ? this.results[feelFor].name : '';
 
     this.root.innerHTML = `
       ${this._header('Rest')}
       <div class="rest-screen">
         <h2>Rest</h2>
         <div id="p-timer" class="timer-display resting">${this._fmt(seconds)}</div>
+        ${feelFor != null ? `
+        <div class="feel-block">
+          <div class="feel-label">How was ${esc(feelName)}?</div>
+          <div class="feel-row">
+            <button class="feel-btn" data-feel="easy">😌 Easy</button>
+            <button class="feel-btn" data-feel="ok">💪 Just right</button>
+            <button class="feel-btn" data-feel="hard">🥵 Hard</button>
+          </div>
+        </div>` : ''}
         <div class="next-up">
           <img class="exercise-thumb" src="${esc(nextEx?.images?.[0] || '')}" alt="">
           <div>
@@ -277,10 +317,19 @@ const Player = {
       </div>`;
 
     this._bindQuit();
+    if (feelFor != null) {
+      this.root.querySelectorAll('.feel-btn').forEach(btn => {
+        btn.onclick = () => {
+          this.results[feelFor].feel = btn.dataset.feel;
+          this.root.querySelectorAll('.feel-btn').forEach(x => x.classList.remove('sel'));
+          btn.classList.add('sel');
+        };
+      });
+    }
     const timerEl = document.getElementById('p-timer');
     const proceed = () => {
       this._cleanupScreen();
-      if (advanceBlock) this._nextBlock(); else this.showExercise();
+      this.showExercise();
     };
     this._countdown = new Countdown({
       seconds,
@@ -295,16 +344,36 @@ const Player = {
   showDone() {
     this._cleanupScreen();
     const mins = Math.max(1, Math.round((Date.now() - this.startedAt.getTime()) / 60000));
+    const lastIdx = this.results.length - 1;
+    const lastDone = this.results[lastIdx]?.sets.length > 0 ? lastIdx : null;
     this.root.innerHTML = `
       ${this._header('Finished')}
       <div class="done-screen">
         <div class="big">🎉</div>
         <h2>Workout complete!</h2>
         <p>${esc(this.session.title)} — ${mins} min</p>
+        ${lastDone != null ? `
+        <div class="feel-block">
+          <div class="feel-label">How was ${esc(this.results[lastDone].name)}?</div>
+          <div class="feel-row">
+            <button class="feel-btn" data-feel="easy">😌 Easy</button>
+            <button class="feel-btn" data-feel="ok">💪 Just right</button>
+            <button class="feel-btn" data-feel="hard">🥵 Hard</button>
+          </div>
+        </div>` : ''}
         <textarea id="p-note" placeholder="How did it feel? (optional — Claude reads this when adjusting your plan)"></textarea>
         <button class="btn" id="p-save">Save workout</button>
       </div>`;
     this._bindQuit();
+    if (lastDone != null) {
+      this.root.querySelectorAll('.feel-btn').forEach(btn => {
+        btn.onclick = () => {
+          this.results[lastDone].feel = btn.dataset.feel;
+          this.root.querySelectorAll('.feel-btn').forEach(x => x.classList.remove('sel'));
+          btn.classList.add('sel');
+        };
+      });
+    }
     document.getElementById('p-save').onclick = () => {
       History.add({
         date: this.startedAt.toISOString(),

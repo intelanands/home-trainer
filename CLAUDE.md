@@ -37,11 +37,20 @@ Rules for any future server-side change:
 - `schedule`: weekday keys `mon`..`sun` → session key or `"rest"`
 - `sessions.<key>`: `{ title, equipment?, blocks: [...] }`
   - `equipment`: strings shown on the pre-workout "Get ready" checklist (mat, chair, stairs…). Dumbbell weights are derived automatically from the blocks — don't list them here. Keep this in sync when changing a session's exercises.
-- block: `{ exerciseId, sets, reps | durationSec, weightKg?, restSec, note? }`
+- block: `{ exerciseId, sets, reps | durationSec, weightKg?, restSec, note?, group? }`
+  - `group`: adjacent blocks sharing a group value run as a SUPERSET — sets interleave round-robin (A1 s1, A2 s1, A1 s2 …). Pair non-competing muscles only (push+pull, upper+lower, arms+core). Warm-ups and cooldowns stay ungrouped.
   - `reps` → rep-based set (user taps done); `durationSec` → timed set (countdown + beeps)
   - `weightKg` is **per dumbbell**
   - `note` is shown prominently in the player ("per side", "use stairs", form cues)
   - `animate?` (boolean) overrides photo animation. Default: rep-based blocks animate, timed blocks show a still frame (static holds like Plank flicker confusingly when alternated). Set `animate: true` on a timed-but-dynamic exercise (e.g. timed mountain climbers).
+
+## Weight progression (how to use history feedback)
+
+After each exercise's last set the app asks one tap: easy / ok / hard → stored as `feel` on that exercise in history (`/opt/home-trainer-data/history.jsonl`). When reviewing history or asked to adjust:
+- all target reps hit + `feel: easy` → +1 kg next time (or +1-2 reps for bodyweight)
+- target reps hit + `ok` → keep, progress after it repeats
+- missed reps or `hard` on 2+ sessions → drop 1 kg or reduce reps
+Sanity-bound by the knee memory: leg-exercise progression stays conservative until the knee is symptom-free.
 
 ## Exercise library
 

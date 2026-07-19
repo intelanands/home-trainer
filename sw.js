@@ -5,7 +5,7 @@
    - Exercise images: cache-first via runtime cache (immutable content).
    - data/*.json: network-first so plan updates from Claude arrive promptly. */
 
-const VERSION = 'v7';
+const VERSION = 'v8';
 const SHELL_CACHE = `trainer-shell-${VERSION}`;
 const RUNTIME_CACHE = 'trainer-runtime';
 
