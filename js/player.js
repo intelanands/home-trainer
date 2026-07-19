@@ -352,7 +352,7 @@ const Player = {
         <div class="big">🎉</div>
         <h2>Workout complete!</h2>
         <p>${esc(this.session.title)} — ${mins} min</p>
-        ${lastDone != null ? `
+        ${lastDone != null && App.signedIn ? `
         <div class="feel-block">
           <div class="feel-label">How was ${esc(this.results[lastDone].name)}?</div>
           <div class="feel-row">
@@ -361,8 +361,13 @@ const Player = {
             <button class="feel-btn" data-feel="hard">🥵 Hard</button>
           </div>
         </div>` : ''}
+        ${App.signedIn ? `
         <textarea id="p-note" placeholder="How did it feel? (optional — Claude reads this when adjusting your plan)"></textarea>
         <button class="btn" id="p-save">Save workout</button>
+        ` : `
+        <p class="demo-note">Demo mode — this workout won't be saved.</p>
+        <button class="btn btn-secondary" id="p-save">Done</button>
+        `}
       </div>`;
     this._bindQuit();
     if (lastDone != null) {
@@ -375,14 +380,16 @@ const Player = {
       });
     }
     document.getElementById('p-save').onclick = () => {
-      History.add({
-        date: this.startedAt.toISOString(),
-        sessionKey: this.sessionKey,
-        sessionTitle: this.session.title,
-        durationMin: mins,
-        exercises: this.results.filter(r => r.sets.length > 0),
-        note: document.getElementById('p-note').value.trim() || undefined,
-      });
+      if (App.signedIn) {
+        History.add({
+          date: this.startedAt.toISOString(),
+          sessionKey: this.sessionKey,
+          sessionTitle: this.session.title,
+          durationMin: mins,
+          exercises: this.results.filter(r => r.sets.length > 0),
+          note: document.getElementById('p-note').value.trim() || undefined,
+        });
+      }
       WakeLock.release();
       this.onExit?.();
     };

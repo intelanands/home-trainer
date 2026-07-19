@@ -64,58 +64,25 @@ server {
     # files are tiny, always fetch fresh.)
     add_header Cache-Control "no-store";
 
-    # LOGIN WALL: every request must carry the gympin cookie; the history API
-    # validates it via this auth subrequest. Anything unauthenticated gets
-    # the login page instead (served as 200 so browsers render it plainly).
-    auth_request /_gym_auth;
-    error_page 401 =200 /login.html;
-
-    location = /_gym_auth {
-        internal;
-        auth_request off;
-        proxy_pass http://127.0.0.1:8091/api/auth;
-        proxy_pass_request_body off;
-        proxy_set_header Content-Length "";
-    }
-
-    # The only public page. X-Gym-Login lets the service worker recognise
-    # login content served under other URLs (via error_page) and never cache it.
-    location = /login.html {
-        auth_request off;
-        add_header Cache-Control "no-cache";
-        add_header X-Gym-Login "1";
-    }
+    # DEMO-MODE AUTH (July 2026): the app and plan are PUBLIC read-only —
+    # the user demos it by sharing the URL. Everything that matters is
+    # guarded by the history API itself: reading/writing history requires
+    # the PIN (gymtok cookie via /api/login, or X-Gym-Pin header). The app
+    # shows sign-in/out buttons and disables saving when signed out.
 
     location = /api/login {
-        auth_request off;
         proxy_pass http://127.0.0.1:8091;
         client_max_body_size 10k;
     }
-
-    # Direct session check for the app's launch gate: must answer JSON
-    # 200/401 itself, never the error_page login redirect.
-    location = /api/auth {
-        auth_request off;
+    location = /api/logout {
         proxy_pass http://127.0.0.1:8091;
     }
-
-    # PWA install metadata must be public: Chrome fetches the manifest and
-    # icons WITHOUT the login cookie when deciding installability — behind
-    # the wall it sees the login page and downgrades install to a plain
-    # shortcut. Name + icons only; nothing sensitive.
-    location = /manifest.json {
-        auth_request off;
-        add_header Cache-Control "no-store";
+    # Session check for the app's signed-in indicator (JSON 200/401)
+    location = /api/auth {
+        proxy_pass http://127.0.0.1:8091;
     }
-    location ~ ^/img/icon {
-        auth_request off;
-        add_header Cache-Control "public, max-age=86400";
-    }
-
-    # Self-guards with the PIN; auth_request off keeps its JSON 401s intact
-    # (error_page must not rewrite API errors into login HTML).
+    # PIN-guarded history (the API enforces auth itself)
     location = /api/history {
-        auth_request off;
         proxy_pass http://127.0.0.1:8091;
         client_max_body_size 200k;
     }
@@ -147,16 +114,17 @@ check gym.recat.in          200   # login page for the unauthenticated
 check portal.catapharma.com 302   # ERP redirects to /login
 check unknown.example.com   302   # unmatched hosts must fall to the ERP default, NOT the trainer
 
-# Login-wall checks: no auth -> login page; with PIN -> the app
-if curl -s -D - -o /dev/null -H 'Host: gym.recat.in' http://localhost/ | grep -qi 'x-gym-login'; then
-  echo 'wall: unauthenticated / serves the login page  OK'
+# Demo-mode checks: app public, history locked
+if curl -s -H 'Host: gym.recat.in' http://localhost/ | grep -q '<title>Home Trainer</title>'; then
+  echo 'demo: / serves the app publicly  OK'
 else
-  echo 'WALL BROKEN: unauthenticated / did NOT serve the login page'; exit 1
+  echo 'BROKEN: / did not serve the app'; exit 1
 fi
-if curl -s -D - -o /dev/null -H 'Host: gym.recat.in' -H "X-Gym-Pin: $PIN" http://localhost/ | grep -qi 'x-gym-login'; then
-  echo 'WALL BROKEN: authenticated / still got the login page'; exit 1
+hist=$(curl -s -o /dev/null -w '%{http_code}' -H 'Host: gym.recat.in' http://localhost/api/history)
+if [ "$hist" = "401" ]; then
+  echo 'guard: /api/history without PIN -> 401  OK'
 else
-  echo 'wall: authenticated / serves the app  OK'
+  echo "GUARD BROKEN: /api/history without PIN -> $hist (want 401)"; exit 1
 fi
 
 echo '=== 4/5 Cloudflare tunnel ingress (brief blip on all tunnel subdomains) ==='

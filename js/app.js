@@ -2,11 +2,15 @@
    All values interpolated into innerHTML templates are escaped via esc()
    (defined in player.js), including user-entered history notes. */
 
-const APP_VERSION = 'v14'; // cosmetic (footer display) — every load is fresh from the server now
+const APP_VERSION = 'v15'; // cosmetic (footer display) — every load is fresh from the server now
 
 const App = {
   plan: null,
   exercisesById: {},
+  // true = owner (PIN session). false = demo mode: browse everything,
+  // save/sync/history disabled. Offline/unknown defaults to true so the
+  // owner's own device never locks itself out of a workout.
+  signedIn: true,
 
   async init() {
     // The service worker is retired: offline-first caching caused every
@@ -44,23 +48,50 @@ const App = {
       setTimeout(() => { e.target.textContent = 'Copy to clipboard'; }, 1500);
     };
 
-    // A device with no local history (new phone, cleared storage) pulls it
-    // back from the server, so device resets are lossless.
-    await History.restoreFromServer();
+    try {
+      const auth = await fetch('./api/auth', { cache: 'no-store' });
+      this.signedIn = auth.status !== 401 && auth.status !== 429;
+    } catch (e) { /* offline — keep signedIn=true for the owner's device */ }
+    this._renderAuthButton();
+
+    if (this.signedIn) {
+      // A device with no local history (new phone, cleared storage) pulls it
+      // back from the server, so device resets are lossless.
+      await History.restoreFromServer();
+    }
 
     this.renderToday();
     this.show('today');
-    // retry any workouts that couldn't reach the server; if sync needs the
-    // PIN or is blocked while online, surface the banner on the Today view
-    History.sync().then(status => {
-      if (status === 'pin' || status === 'blocked') this.renderToday();
-    });
+    if (this.signedIn) {
+      // retry any workouts that couldn't reach the server; if sync needs the
+      // PIN or is blocked while online, surface the banner on the Today view
+      History.sync().then(status => {
+        if (status === 'pin' || status === 'blocked') this.renderToday();
+      });
+    }
+  },
+
+  _renderAuthButton() {
+    const btn = document.getElementById('btn-auth');
+    if (!btn) return;
+    btn.textContent = this.signedIn ? 'Sign out' : 'Sign in';
+    btn.onclick = async () => {
+      if (!this.signedIn) { location.href = './login.html'; return; }
+      try { await fetch('./api/logout', { method: 'POST' }); } catch (e) { /* ignore */ }
+      location.reload();
+    };
   },
 
   /* './?signin=<ts>' busts the service-worker cache so the navigation truly
      hits the network — the nginx login wall then serves the sign-in page,
      and the cookie it sets covers both the app and history sync. */
   _syncBannerHtml() {
+    if (!this.signedIn) {
+      return `
+        <div class="demo-banner">
+          👀 Demo mode — browse freely; workouts won't be saved.
+        </div>`;
+    }
     if (History.lastSyncStatus === 'pin') {
       return `
         <a class="sync-banner" href="./?signin=${Date.now()}">
@@ -81,6 +112,7 @@ const App = {
     document.querySelectorAll('.nav-btn').forEach(b =>
       b.classList.toggle('active', b.dataset.nav === view));
     document.getElementById('bottom-nav').classList.toggle('hidden', view === 'player');
+    document.getElementById('btn-auth')?.classList.toggle('hidden', view === 'player');
     if (view === 'history') this.renderHistory();
     if (view === 'today') this.renderToday();
     window.scrollTo(0, 0);
@@ -181,6 +213,11 @@ const App = {
 
   renderHistory() {
     const container = document.getElementById('history-content');
+    document.querySelector('.history-actions').classList.toggle('hidden', !this.signedIn);
+    if (!this.signedIn) {
+      container.innerHTML = '<div class="history-empty">🔒 Workout history is private.<br>Sign in to view it.</div>';
+      return;
+    }
     const entries = History.all().slice().reverse();
     if (!entries.length) {
       container.innerHTML = '<div class="history-empty">No workouts yet.<br>Your finished sessions will appear here.</div>';

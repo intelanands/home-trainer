@@ -151,6 +151,9 @@ class Handler(BaseHTTPRequestHandler):
         path = self.path.split('?')[0].rstrip('/')
         if path == '/api/login':
             return self._do_login()
+        if path == '/api/logout':
+            expired = 'gymtok=; Max-Age=0; Path=/; HttpOnly; Secure; SameSite=Lax'
+            return self._send(200, {'ok': True}, {'Set-Cookie': expired})
         if path != '/api/history':
             return self._send(404, {'error': 'not found'})
         if not self._auth():
