@@ -2,7 +2,7 @@
    All values interpolated into innerHTML templates are escaped via esc()
    (defined in player.js), including user-entered history notes. */
 
-const APP_VERSION = 'v6'; // keep in sync with VERSION in sw.js
+const APP_VERSION = 'v7'; // keep in sync with VERSION in sw.js
 
 const App = {
   plan: null,
@@ -50,6 +50,7 @@ const App = {
 
     this.renderToday();
     this.show('today');
+    History.sync(); // retry any workouts that couldn't reach the server
   },
 
   show(view) {

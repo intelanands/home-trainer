@@ -3,7 +3,7 @@
 # Run on the server (or: ssh administrator@192.168.1.13 'bash -s' < deploy/setup-gym.sh)
 set -euo pipefail
 
-echo '=== 1/4 Clone (or update) the app ==='
+echo '=== 1/5 Clone (or update) the app ==='
 if [ ! -d /opt/home-trainer ]; then
   sudo mkdir -p /opt/home-trainer
   sudo chown administrator:administrator /opt/home-trainer
@@ -12,7 +12,7 @@ else
   git -C /opt/home-trainer pull
 fi
 
-echo '=== 2/4 Nginx site (graceful reload, no portal downtime) ==='
+echo '=== 2/5 Nginx site (graceful reload, no portal downtime) ==='
 
 # SAFETY (incident, July 2026): this box's nginx serves multiple sites on :80.
 # The ERP site uses `server_name _`, which matches NOTHING — it only receives
@@ -46,6 +46,12 @@ server {
     # Never serve repo internals (.git, .claude)
     location ~ /\. { deny all; }
 
+    # History-sync API (deploy/history-api.py via systemd, loopback only)
+    location = /api/history {
+        proxy_pass http://127.0.0.1:8091;
+        client_max_body_size 200k;
+    }
+
     location / { try_files $uri $uri/ =404; }
 }
 EOF
@@ -65,7 +71,7 @@ check gym.recat.in          200   # the trainer (static index)
 check portal.catapharma.com 302   # ERP redirects to /login
 check unknown.example.com   302   # unmatched hosts must fall to the ERP default, NOT the trainer
 
-echo '=== 3/4 Cloudflare tunnel ingress (brief blip on all tunnel subdomains) ==='
+echo '=== 3/5 Cloudflare tunnel ingress (brief blip on all tunnel subdomains) ==='
 if ! sudo grep -q 'gym\.recat\.in' /etc/cloudflared/config.yml; then
   sudo sed -i 's|^\(\s*\)- service: http_status:404|\1- hostname: gym.recat.in\n\1  service: http://localhost:80\n\1- service: http_status:404|' /etc/cloudflared/config.yml
 fi
@@ -75,7 +81,18 @@ sudo systemctl restart cloudflared
 sleep 3
 systemctl is-active cloudflared
 
-echo '=== 4/4 DNS check ==='
+echo '=== 4/5 History API service ==='
+sudo mkdir -p /opt/home-trainer-data
+sudo chown administrator:administrator /opt/home-trainer-data
+sudo cp /opt/home-trainer/deploy/home-trainer-api.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable --now home-trainer-api
+sudo systemctl restart home-trainer-api  # pick up script changes on redeploys
+sleep 1
+curl -s -o /dev/null -w 'api direct: %{http_code}\n' http://127.0.0.1:8091/api/history
+curl -s -o /dev/null -w 'api via nginx: %{http_code}\n' -H 'Host: gym.recat.in' http://localhost/api/history
+
+echo '=== 5/5 DNS check ==='
 # DNS is a MANUAL record — the tunnel cert only covers catapharma.com, so
 # `cloudflared tunnel route dns` cannot manage the recat.in zone (running it
 # anyway creates a junk gym.recat.in.catapharma.com record — don't).

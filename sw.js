@@ -5,7 +5,7 @@
    - Exercise images: cache-first via runtime cache (immutable content).
    - data/*.json: network-first so plan updates from Claude arrive promptly. */
 
-const VERSION = 'v6';
+const VERSION = 'v7';
 const SHELL_CACHE = `trainer-shell-${VERSION}`;
 const RUNTIME_CACHE = 'trainer-runtime';
 
@@ -49,6 +49,7 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (e) => {
   const url = new URL(e.request.url);
   if (e.request.method !== 'GET' || url.origin !== location.origin) return;
+  if (url.pathname.includes('/api/')) return; // history sync — never cached
 
   if (url.pathname.includes('/data/')) {
     // network-first: fresh plan when online, cached plan when offline

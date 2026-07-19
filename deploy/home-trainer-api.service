@@ -1,0 +1,12 @@
+[Unit]
+Description=Home Trainer history-sync API (127.0.0.1:8091)
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /opt/home-trainer/deploy/history-api.py
+Restart=on-failure
+RestartSec=3
+User=administrator
+
+[Install]
+WantedBy=multi-user.target

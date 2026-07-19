@@ -1,4 +1,7 @@
-/* Workout history stored in localStorage, exportable as JSON. */
+/* Workout history stored in localStorage and auto-synced to the server
+   (POST ./api/history). localStorage remains the offline source for the
+   History view; entries carry synced:false until the server confirms,
+   and unsynced ones retry on every app launch. */
 
 const History = {
   KEY: 'trainer.history.v1',
@@ -11,10 +14,34 @@ const History = {
     }
   },
 
+  _save(list) {
+    localStorage.setItem(this.KEY, JSON.stringify(list));
+  },
+
   add(entry) {
     const list = this.all();
+    entry.synced = false;
     list.push(entry);
-    localStorage.setItem(this.KEY, JSON.stringify(list));
+    this._save(list);
+    this.sync();
+  },
+
+  async sync() {
+    const list = this.all();
+    for (const entry of list.filter(e => !e.synced)) {
+      try {
+        const res = await fetch('./api/history', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(entry),
+        });
+        if (!res.ok) throw new Error(res.status);
+        entry.synced = true;
+        this._save(list);
+      } catch (e) {
+        break; // offline or server down — keep queued, retry next launch
+      }
+    }
   },
 
   exportText() {

@@ -154,7 +154,12 @@ const Player = {
     const b = this.block();
     const ex = this.exercise();
     const isTimed = b.durationSec != null;
-    const img = ex?.images?.[0] || '';
+    // Static holds (timed sets) show a single still frame — alternating photos
+    // of a near-identical pose reads as flicker. block.animate overrides.
+    const animate = b.animate ?? !isTimed;
+    // Still frames must show the HELD pose: photo 0 is the rest/start
+    // position, photo 1 the working position (user-reported bug).
+    const img = (!animate && ex?.images?.[1]) || ex?.images?.[0] || '';
     const muscles = ex ? ex.primaryMuscles.join(', ') : '';
 
     this.root.innerHTML = `
@@ -195,9 +200,6 @@ const Player = {
       </div>`;
 
     this._bindQuit();
-    // Static holds (timed sets) show a single still frame — alternating photos
-    // of a near-identical pose reads as flicker. block.animate overrides.
-    const animate = b.animate ?? !isTimed;
     if (animate) this._startAnim(document.getElementById('p-img'), ex?.images);
     document.getElementById('p-skip').onclick = () => this._nextBlock();
 
