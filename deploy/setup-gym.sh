@@ -90,6 +90,13 @@ server {
         client_max_body_size 10k;
     }
 
+    # Direct session check for the app's launch gate: must answer JSON
+    # 200/401 itself, never the error_page login redirect.
+    location = /api/auth {
+        auth_request off;
+        proxy_pass http://127.0.0.1:8091;
+    }
+
     # Self-guards with the PIN; auth_request off keeps its JSON 401s intact
     # (error_page must not rewrite API errors into login HTML).
     location = /api/history {

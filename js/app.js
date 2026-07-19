@@ -2,13 +2,25 @@
    All values interpolated into innerHTML templates are escaped via esc()
    (defined in player.js), including user-entered history notes. */
 
-const APP_VERSION = 'v12'; // keep in sync with VERSION in sw.js
+const APP_VERSION = 'v13'; // keep in sync with VERSION in sw.js
 
 const App = {
   plan: null,
   exercisesById: {},
 
   async init() {
+    // Launch gate: the cached shell always opens (that's offline-first
+    // working as designed), so when online, actively verify the session and
+    // bounce to the login page if the server says we're signed out. Offline
+    // or server-down launches proceed — the wall still guards all data.
+    try {
+      const auth = await fetch('./api/auth', { cache: 'no-store' });
+      if (auth.status === 401 || auth.status === 429) {
+        location.replace('./login.html');
+        return;
+      }
+    } catch (e) { /* offline — run from cache */ }
+
     try {
       const [plan, exercises] = await Promise.all([
         fetch('./data/plan.json').then(r => r.json()),
