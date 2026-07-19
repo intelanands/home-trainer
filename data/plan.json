@@ -1,7 +1,7 @@
 {
   "athlete": {
     "equipment": ["2x dumbbells up to 10kg", "yoga mat", "stairs", "chair", "bench-like furniture"],
-    "notes": "Home training. Weights are per dumbbell. Adjust in chat with Claude anytime. Left knee: mild discomfort on twists (noted Jul 2026) — knee work stays in pain-free range, no knee caving inward, no loaded twisting."
+    "notes": "Home training. Weights are per dumbbell. Adjust in chat with Claude anytime. Left knee: mild discomfort on twists (noted Jul 2026) — knee work stays in pain-free range, no knee caving inward, no loaded twisting. Desk job (sits all day) → hip-flexor stretch every cooldown. Goal: start jogging — building calf capacity now; add a Saturday walk-jog day after 2-4 knee-quiet weeks."
   },
   "schedule": {
     "mon": "full-body-a",
@@ -24,8 +24,10 @@
         { "exerciseId": "Pushups", "sets": 3, "reps": 10, "restSec": 75, "note": "Knees down if needed" },
         { "exerciseId": "One-Arm_Dumbbell_Row", "sets": 3, "reps": 12, "weightKg": 10, "restSec": 60, "note": "Per arm, brace on chair" },
         { "exerciseId": "Standing_Dumbbell_Press", "sets": 3, "reps": 10, "weightKg": 6, "restSec": 75 },
+        { "exerciseId": "Standing_Dumbbell_Calf_Raise", "sets": 2, "reps": 15, "weightKg": 8, "restSec": 45, "note": "Slow 3-sec lowering — building toward jogging" },
         { "exerciseId": "Plank", "sets": 3, "durationSec": 40, "restSec": 45 },
-        { "exerciseId": "90_90_Hamstring", "sets": 2, "durationSec": 30, "restSec": 15, "note": "Cooldown, one set per leg" }
+        { "exerciseId": "90_90_Hamstring", "sets": 2, "durationSec": 30, "restSec": 15, "note": "Cooldown, one set per leg" },
+        { "exerciseId": "All_Fours_Quad_Stretch", "sets": 2, "durationSec": 30, "restSec": 15, "note": "Cooldown, one set per leg — opens hips after desk sitting" }
       ]
     },
     "full-body-b": {
@@ -39,6 +41,7 @@
         { "exerciseId": "Bent_Over_Two-Dumbbell_Row", "sets": 3, "reps": 12, "weightKg": 8, "restSec": 75, "note": "Flat back" },
         { "exerciseId": "Side_Lateral_Raise", "sets": 3, "reps": 12, "weightKg": 4, "restSec": 60, "note": "Light weight, strict form" },
         { "exerciseId": "Bench_Dips", "sets": 3, "reps": 10, "restSec": 60, "note": "Use a sturdy chair" },
+        { "exerciseId": "Dumbbell_Seated_One-Leg_Calf_Raise", "sets": 2, "reps": 12, "weightKg": 10, "restSec": 45, "note": "Per leg, dumbbell on the knee — soleus, the jogging workhorse" },
         { "exerciseId": "Russian_Twist", "sets": 3, "reps": 20, "restSec": 45, "note": "10 per side — rotate from the torso, knees stay still" },
         { "exerciseId": "All_Fours_Quad_Stretch", "sets": 2, "durationSec": 30, "restSec": 15, "note": "Cooldown, one set per leg" }
       ]
@@ -54,9 +57,10 @@
         { "exerciseId": "Seated_Dumbbell_Press", "sets": 3, "reps": 10, "weightKg": 6, "restSec": 75, "note": "Sit on chair or bench" },
         { "exerciseId": "Dumbbell_Bicep_Curl", "sets": 2, "reps": 12, "weightKg": 6, "restSec": 60 },
         { "exerciseId": "Tricep_Dumbbell_Kickback", "sets": 2, "reps": 12, "weightKg": 4, "restSec": 60 },
-        { "exerciseId": "Standing_Dumbbell_Calf_Raise", "sets": 2, "reps": 15, "weightKg": 8, "restSec": 45, "note": "Slow down-phase — calf/ankle stability supports the knee" },
+        { "exerciseId": "Standing_Dumbbell_Calf_Raise", "sets": 3, "reps": 15, "weightKg": 8, "restSec": 45, "note": "Slow down-phase — when 3x15 feels easy, tell Claude to progress to single-leg" },
         { "exerciseId": "Dead_Bug", "sets": 3, "reps": 10, "restSec": 45, "note": "Slow and controlled" },
-        { "exerciseId": "Side_Bridge", "sets": 2, "durationSec": 30, "restSec": 30, "note": "One set per side" }
+        { "exerciseId": "Side_Bridge", "sets": 2, "durationSec": 30, "restSec": 30, "note": "One set per side" },
+        { "exerciseId": "All_Fours_Quad_Stretch", "sets": 2, "durationSec": 30, "restSec": 15, "note": "Cooldown, one set per leg — opens hips after desk sitting" }
       ]
     }
   }
