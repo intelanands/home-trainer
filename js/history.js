@@ -26,8 +26,16 @@ const History = {
     this.sync();
   },
 
+  /* 'ok' | 'offline' | 'blocked'. 'blocked' = online but the server did not
+     genuinely confirm (down, or an auth wall like Cloudflare Access is
+     intercepting) — the UI shows a sign-in banner for it. Only a real
+     {ok:true} JSON reply marks an entry synced; a login page served with
+     HTTP 200 must never count. */
+  lastSyncStatus: 'ok',
+
   async sync() {
     const list = this.all();
+    let status = 'ok';
     for (const entry of list.filter(e => !e.synced)) {
       try {
         const res = await fetch('./api/history', {
@@ -35,13 +43,18 @@ const History = {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(entry),
         });
-        if (!res.ok) throw new Error(res.status);
+        const data = res.ok && !res.redirected ? await res.json().catch(() => null) : null;
+        if (data?.ok !== true) throw new Error('no server confirmation');
         entry.synced = true;
         this._save(list);
       } catch (e) {
-        break; // offline or server down — keep queued, retry next launch
+        // keep queued, retry next launch
+        status = navigator.onLine === false ? 'offline' : 'blocked';
+        break;
       }
     }
+    this.lastSyncStatus = status;
+    return status;
   },
 
   exportText() {

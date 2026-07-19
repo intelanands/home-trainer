@@ -5,7 +5,7 @@
    - Exercise images: cache-first via runtime cache (immutable content).
    - data/*.json: network-first so plan updates from Claude arrive promptly. */
 
-const VERSION = 'v8';
+const VERSION = 'v9';
 const SHELL_CACHE = `trainer-shell-${VERSION}`;
 const RUNTIME_CACHE = 'trainer-runtime';
 
@@ -51,25 +51,42 @@ self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET' || url.origin !== location.origin) return;
   if (url.pathname.includes('/api/')) return; // history sync — never cached
 
+  // Only genuine same-origin 200s get cached. A redirect or an HTML body on
+  // a data/image path means an auth wall (e.g. Cloudflare Access) answered —
+  // caching that would poison the app with login pages.
+  const cacheable = (res, wantJson) => {
+    if (!res.ok || res.redirected) return false;
+    const type = res.headers.get('content-type') || '';
+    if (wantJson) return type.includes('json');
+    return !type.includes('text/html');
+  };
+
   if (url.pathname.includes('/data/')) {
-    // network-first: fresh plan when online, cached plan when offline
+    // network-first: fresh plan when online, cached plan when offline/blocked
     e.respondWith(
-      fetch(e.request).then(res => {
-        const copy = res.clone();
-        caches.open(RUNTIME_CACHE).then(c => c.put(e.request, copy));
-        return res;
+      fetch(e.request).then(async res => {
+        if (cacheable(res, true)) {
+          const copy = res.clone();
+          caches.open(RUNTIME_CACHE).then(c => c.put(e.request, copy));
+          return res;
+        }
+        return (await caches.match(e.request)) || res;
       }).catch(() => caches.match(e.request))
     );
     return;
   }
 
   if (SHELL_PATHS.has(url.pathname)) {
-    // shell: only ever from the versioned shell cache
+    // shell: only ever from the versioned shell cache. Query-string requests
+    // (./?signin=...) intentionally bypass the cache to reach the network,
+    // and must not be cached under that key.
     e.respondWith(
       caches.match(e.request, { cacheName: SHELL_CACHE }).then(hit =>
         hit || fetch(e.request).then(res => {
-          const copy = res.clone();
-          caches.open(SHELL_CACHE).then(c => c.put(e.request, copy));
+          if (cacheable(res, false) && !url.search) {
+            const copy = res.clone();
+            caches.open(SHELL_CACHE).then(c => c.put(e.request, copy));
+          }
           return res;
         }))
     );
@@ -79,8 +96,10 @@ self.addEventListener('fetch', (e) => {
   // cache-first for exercise images and everything else
   e.respondWith(
     caches.match(e.request).then(hit => hit || fetch(e.request).then(res => {
-      const copy = res.clone();
-      caches.open(RUNTIME_CACHE).then(c => c.put(e.request, copy));
+      if (cacheable(res, false)) {
+        const copy = res.clone();
+        caches.open(RUNTIME_CACHE).then(c => c.put(e.request, copy));
+      }
       return res;
     }))
   );
