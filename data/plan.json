@@ -19,11 +19,11 @@
       "blocks": [
         { "exerciseId": "Inchworm", "sets": 2, "reps": 8, "restSec": 30, "note": "Warm-up, go slow" },
         { "exerciseId": "Bodyweight_Squat", "sets": 2, "reps": 15, "restSec": 45, "note": "Warm-up pace" },
-        { "exerciseId": "Dumbbell_Squat", "sets": 3, "reps": 12, "weightKg": 8, "restSec": 60, "group": "A", "note": "Knees track over toes, pain-free depth only" },
+        { "exerciseId": "Dumbbell_Squat", "sets": 3, "reps": 12, "weightKg": 6, "restSec": 60, "group": "A", "note": "Knees track over toes, pain-free depth only" },
         { "exerciseId": "Pushups", "sets": 3, "reps": 8, "restSec": 60, "group": "A", "note": "Knee push-ups count — full clean sets beat short ones" },
         { "exerciseId": "Single_Leg_Glute_Bridge", "sets": 2, "reps": 10, "restSec": 45, "group": "B", "note": "Per leg — knee stability work, squeeze glute at top" },
-        { "exerciseId": "One-Arm_Dumbbell_Row", "sets": 3, "reps": 12, "weightKg": 10, "restSec": 60, "group": "B", "note": "Per arm, brace on chair" },
-        { "exerciseId": "Standing_Dumbbell_Press", "sets": 3, "reps": 10, "weightKg": 6, "restSec": 60, "group": "C" },
+        { "exerciseId": "One-Arm_Dumbbell_Row", "sets": 3, "reps": 12, "weightKg": 8, "restSec": 60, "group": "B", "note": "Per arm, brace on chair" },
+        { "exerciseId": "Standing_Dumbbell_Press", "sets": 3, "reps": 8, "weightKg": 4, "restSec": 60, "group": "C" },
         { "exerciseId": "Standing_Dumbbell_Calf_Raise", "sets": 2, "reps": 15, "weightKg": 5, "restSec": 45, "group": "C", "note": "Slow 3-sec lowering — building toward jogging" },
         { "exerciseId": "Plank", "sets": 3, "durationSec": 40, "restSec": 45 },
         { "exerciseId": "90_90_Hamstring", "sets": 2, "durationSec": 30, "restSec": 15, "note": "Cooldown, one set per leg" },
@@ -35,13 +35,13 @@
       "equipment": ["Yoga mat", "Sturdy chair (for bench dips + seated calf raises)", "Water bottle"],
       "blocks": [
         { "exerciseId": "Inchworm", "sets": 2, "reps": 8, "restSec": 30, "note": "Warm-up, go slow" },
-        { "exerciseId": "Dumbbell_Rear_Lunge", "sets": 3, "reps": 10, "weightKg": 6, "restSec": 60, "group": "A", "note": "10 per leg — step BACK (easier on knees), front shin stays vertical" },
-        { "exerciseId": "Dumbbell_Floor_Press", "sets": 3, "reps": 12, "weightKg": 8, "restSec": 60, "group": "A", "note": "On the mat" },
+        { "exerciseId": "Dumbbell_Rear_Lunge", "sets": 3, "reps": 10, "weightKg": 5, "restSec": 60, "group": "A", "note": "10 per leg — step BACK (easier on knees), front shin stays vertical" },
+        { "exerciseId": "Dumbbell_Floor_Press", "sets": 3, "reps": 12, "weightKg": 6, "restSec": 60, "group": "A", "note": "On the mat" },
         { "exerciseId": "Side_Leg_Raises", "sets": 2, "reps": 12, "restSec": 45, "group": "B", "note": "Per side, slow — side-glute work that steadies the knee" },
-        { "exerciseId": "Bent_Over_Two-Dumbbell_Row", "sets": 3, "reps": 12, "weightKg": 8, "restSec": 60, "group": "B", "note": "Flat back" },
+        { "exerciseId": "Bent_Over_Two-Dumbbell_Row", "sets": 3, "reps": 12, "weightKg": 6, "restSec": 60, "group": "B", "note": "Flat back" },
         { "exerciseId": "Bench_Dips", "sets": 3, "reps": 10, "restSec": 60, "group": "C", "note": "Use a sturdy chair" },
         { "exerciseId": "Dumbbell_Seated_One-Leg_Calf_Raise", "sets": 2, "reps": 12, "weightKg": 10, "restSec": 45, "group": "C", "note": "Per leg, dumbbell on the knee — soleus, the jogging workhorse" },
-        { "exerciseId": "Side_Lateral_Raise", "sets": 3, "reps": 12, "weightKg": 4, "restSec": 60, "group": "D", "note": "Light weight, strict form" },
+        { "exerciseId": "Side_Lateral_Raise", "sets": 3, "reps": 10, "weightKg": 4, "restSec": 60, "group": "D", "note": "Light weight, strict form" },
         { "exerciseId": "Russian_Twist", "sets": 3, "reps": 20, "restSec": 45, "group": "D", "note": "10 per side — rotate from the torso, knees stay still" },
         { "exerciseId": "All_Fours_Quad_Stretch", "sets": 2, "durationSec": 30, "restSec": 15, "note": "Cooldown, one set per leg — opens hips after desk sitting" }
       ]
