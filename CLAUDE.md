@@ -33,6 +33,16 @@ Rules for any future server-side change:
 3. The tunnel ingress file (`/etc/cloudflared/config.yml`) is first-match and shared — add/remove only the `gym.recat.in` entry, keep it above the trailing `http_status:404` fallback, and remember a cloudflared restart briefly blips ALL subdomains.
 4. The ERP repo's `deploy/nginx.conf` template is the rebuild source for the ERP site — it must keep `default_server` (PR'd in July 2026); if a rebuilt server ever loses it, `setup-gym.sh`'s guard will catch it.
 
+## ROADMAP.md — the long-term plan
+
+**Read `ROADMAP.md` before changing the program.** It holds the phases, the readiness
+gates (notably the four that must all pass before adding the walk-jog day), the rules
+that don't change, and the progress log. `plan.json` is the current week and flexes
+freely; the roadmap is the fixed direction. When a session review produces something
+durable — a new body note, a phase transition, a substitution that should stick —
+append a dated line to the roadmap's progress log and update the affected phase.
+Don't let the two drift apart.
+
 ## plan.json contract
 
 - `schedule`: weekday keys `mon`..`sun` → session key or `"rest"`
