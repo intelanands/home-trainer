@@ -85,7 +85,7 @@
       "equipment": ["Comfortable shoes", "Yoga mat (for the stretches)", "Fixed 5 kg pair (calf raises)", "Water bottle"],
       "blocks": [
         { "exerciseId": "Brisk_Walk", "sets": 1, "durationSec": 1200, "restSec": 60, "note": "20 minutes, conversational pace. Take the phone and go — the timer runs in your pocket" },
-        { "exerciseId": "Standing_Dumbbell_Calf_Raise", "sets": 3, "reps": 15, "weightKg": 5, "restSec": 45, "note": "Fixed 5 kg pair. Slow 3-sec lowering — calves take frequent work well, and they're the jogging bottleneck" },
+        { "exerciseId": "Standing_Dumbbell_Calf_Raise", "sets": 3, "reps": 15, "weightKg": 5, "restSec": 45, "note": "Fixed 5 kg pair. Slow 3-sec lowering. FIRST TIME ONLY: before your sets, test how many SINGLE-leg raises you can do with no weight (fingertips on a wall for balance) — that number is a jogging gate, tell Claude both sides" },
         { "exerciseId": "Side_Leg_Raises", "sets": 2, "reps": 12, "restSec": 30, "note": "Per side — the knock-knee correction, little and often" },
         { "exerciseId": "Standing_Soleus_And_Achilles_Stretch", "sets": 2, "durationSec": 30, "restSec": 15, "note": "One set per side — the achilles is what complains first when new runners add mileage" },
         { "exerciseId": "Kneeling_Hip_Flexor", "sets": 2, "durationSec": 40, "restSec": 15, "note": "One set per side" }

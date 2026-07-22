@@ -23,7 +23,8 @@ Started: **19 July 2026**. Reviewed monthly against `history.jsonl`.
 
 | Measure | Starting value | Reading |
 |---|---|---|
-| Daily steps | **~3,000** | Sedentary (under 5,000). The walk days roughly double a typical day. |
+| Daily steps | **~3,000** typical | This is the desk *routine*, **not capacity** — see below. |
+| Walking capacity | **12,000+/day for 2 weeks** (late Jun 2026, travelling); full days standing and walking at exhibitions with no after-effects | Walking is a solved problem. Don't design around building it. |
 | Heart rate, daily min | **50 bpm** (21 Jul) | Healthy. This is the RHR proxy — track the *minimum*, not the daily average. |
 | Heart rate, daily avg | 70 bpm, range 50–90 | Unremarkable; listed only so a future comparison isn't confused by it. |
 
@@ -142,10 +143,16 @@ jogging safe. This is the longest and most important phase.
 
 **Readiness gates for starting to jog** (all four, no exceptions):
 
-- [ ] Knee quiet for 2–4 consecutive weeks of training
-- [ ] 15+ single-leg calf raises, controlled, both sides
+- [ ] Knee quiet for 2–4 consecutive weeks of training ← **the binding constraint**
+- [ ] 15+ single-leg calf raises, controlled, both sides ← **untested, go measure it**
 - [ ] Single-leg glute bridges without the hip dropping
-- [ ] Comfortable 30-minute brisk walk (this is Saturday's session — the gate tests itself)
+- [x] ~~Comfortable 30-minute brisk walk~~ — **already met** (12,000+ steps/day for two
+      weeks in late June, plus regular full days on foot at exhibitions, no after-effects)
+
+**Timing consequence:** with walking capacity established, jogging is gated by knee
+quiet-weeks and calf strength, not by aerobic or walking base. Realistic start is
+**mid-to-late August**, not the September–October originally sketched — provided the
+knee stays quiet and the calf test passes.
 
 **Leaving Phase 2 when:** jogging 3 × 5 min within a walk-jog session, pain-free.
 
@@ -178,16 +185,14 @@ No need to decide now. Reassess when you get here.
 
 ## The daily baseline (outside the sessions)
 
-At ~3,000 steps a day, the highest-value thing outside training isn't more training —
-it's **breaking up the sitting**. Two or three minutes of movement every hour or so
-adds 1,500–2,000 steps a day on its own, which is a bigger change than any single
-workout, and the frequent hip and knee movement is exactly what a desk-bound body
-with knock knees needs.
+The ~3,000 steps isn't a fitness problem — 12,000/day for two weeks proves the
+capacity is there. It's a **sitting** problem, and prolonged sitting carries its own
+costs regardless of how fit you are. So the point of breaking it up (two or three
+minutes of movement every hour or so, worth 1,500–2,000 steps a day) is joint and
+posture health, not conditioning.
 
-Rough target: get typical *non-walk* days from 3,000 to around **5,000 steps** over
-the next month or two. Stairs instead of lifts, a lap while on calls, walking to
-things that could be driven to. No tracking discipline needed — the trend is what
-matters, not any individual day.
+Loose target of ~5,000 on typical desk days. Stairs instead of lifts, a lap while on
+calls. No tracking discipline needed — nothing in the training plan depends on it.
 
 ## Rules that don't change
 
@@ -252,5 +257,7 @@ Short entries, newest last. Updated at each review.
   **Week restructured to six days, three hard** — three easy days added (mobility &
   core, walk & calves, long walk) after the user asked about training six days a week.
   Strength stimulus unchanged; habit and jogging base gained. Baseline metrics captured
-  (~3,000 steps/day, HR min 50 bpm) — the low step count makes the walk days the most
-  valuable change in the week, and makes the jogging readiness gates load-bearing.
+  (~3,000 steps/day, HR min 50 bpm). Then corrected: the user walks 12,000+/day for
+  weeks at a time when travelling and works full days on foot at exhibitions without
+  after-effects, so the walking gate is already met and jogging is gated by the knee
+  and calf strength alone — target start moved earlier, to mid-to-late August.
