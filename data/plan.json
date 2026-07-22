@@ -56,11 +56,11 @@
       "blocks": [
         { "exerciseId": "Inchworm", "sets": 2, "reps": 8, "restSec": 30, "note": "Warm-up, go slow" },
         { "exerciseId": "Dumbbell_Rear_Lunge", "sets": 3, "reps": 10, "weightKg": 5, "restSec": 60, "group": "A", "note": "Fixed 5 kg pair, 10 per leg — step BACK, front shin vertical, knee tracks over the middle toe" },
-        { "exerciseId": "Dumbbell_Floor_Press", "sets": 3, "reps": 10, "weightKg": 5, "restSec": 60, "group": "A", "note": "Fixed 5 kg pair, on the mat — back fully supported" },
-        { "exerciseId": "Side_Leg_Raises", "sets": 3, "reps": 12, "restSec": 45, "group": "B", "note": "Per side, slow — side-glute work that pulls the knees back out into line" },
+        { "exerciseId": "Dumbbell_Floor_Press", "sets": 3, "reps": 12, "weightKg": 5, "restSec": 60, "group": "A", "note": "Fixed 5 kg pair, on the mat — back fully supported. Reps up from 10; when 12 is easy too we jump to 6.5 kg" },
+        { "exerciseId": "Side_Leg_Raises", "sets": 3, "reps": 15, "restSec": 45, "group": "B", "note": "Per side, slow — side-glute work that pulls the knees back out into line" },
         { "exerciseId": "One-Arm_Dumbbell_Row", "sets": 3, "reps": 12, "weightKg": 7.5, "restSec": 60, "group": "B", "note": "The loaded rod, per arm, free hand braced on the chair — supported, so it spares the lower back" },
         { "exerciseId": "Bench_Dips", "sets": 3, "reps": 10, "restSec": 60, "group": "C", "note": "Use a sturdy chair — bend your knees and keep feet close for an easier version" },
-        { "exerciseId": "Dumbbell_Seated_One-Leg_Calf_Raise", "sets": 2, "reps": 12, "weightKg": 7.5, "restSec": 45, "group": "C", "note": "The loaded rod, per leg — rest it on your thigh just ABOVE the knee, never on the kneecap" },
+        { "exerciseId": "Dumbbell_Seated_One-Leg_Calf_Raise", "sets": 3, "reps": 15, "weightKg": 7.5, "restSec": 45, "group": "C", "note": "The loaded rod, per leg — rest it on your thigh just ABOVE the knee, never on the kneecap. Up to 3x15 after you knocked out 20 — this is the jogging muscle, so it earns the volume" },
         { "exerciseId": "Side_Lateral_Raise", "sets": 3, "reps": 10, "weightKg": 2.5, "restSec": 60, "group": "D", "note": "Fixed 2.5 kg pair — light on purpose, strict form beats weight here" },
         { "exerciseId": "Dead_Bug", "sets": 3, "reps": 10, "restSec": 45, "group": "D", "note": "Slow — lower back stays pressed into the mat. Replaces Russian twists while your back settles" },
         { "exerciseId": "All_Fours_Quad_Stretch", "sets": 2, "durationSec": 30, "restSec": 15, "note": "Cooldown, one set per leg — opens hips after desk sitting" }

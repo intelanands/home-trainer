@@ -301,11 +301,20 @@ const Player = {
 
   /* feelFor: block index to rate ("how did that exercise feel?"), shown after
      an exercise's final set. One tap, optional — feeds weight progression. */
+  /* What you're about to do: "12 reps · 7.5 kg" or "40s". */
+  _targetLabel(b) {
+    if (b.durationSec != null) return this._durLabel(b.durationSec);
+    const parts = [`${b.reps} reps`];
+    if (b.weightKg != null) parts.push(`${b.weightKg} kg`);
+    return parts.join(' · ');
+  },
+
   showRest(seconds, feelFor) {
     const next = this.step();
     const nextBlock = this.session.blocks[next.b];
     const nextEx = this.exercises[nextBlock.exerciseId];
-    const nextLabel = `Next: set ${next.s + 1} of ${nextBlock.sets} — ${nextEx?.name || nextBlock.exerciseId}`;
+    const nextName = nextEx?.name || nextBlock.exerciseId;
+    const nextLabel = `Next: set ${next.s + 1} of ${nextBlock.sets} — ${nextName}`;
     const feelName = feelFor != null ? this.results[feelFor].name : '';
 
     this.root.innerHTML = `
@@ -326,10 +335,14 @@ const Player = {
           ${nextEx?.images?.[0] ? `<img class="exercise-thumb" src="${esc(nextEx.images[0])}" alt="">` : ''}
           <div>
             <div class="name">${esc(nextLabel)}</div>
+            <div class="detail">${esc(this._targetLabel(nextBlock))}</div>
           </div>
         </div>
+        ${nextBlock.note ? `<div class="set-note">${esc(nextBlock.note)}</div>` : ''}
         <button class="btn btn-secondary" id="p-add15">+15 sec</button>
         <button class="btn" id="p-skiprest">Skip rest →</button>
+        ${this._instructionsHtml(nextEx)}
+        ${this._videoLinkHtml(nextName)}
       </div>`;
 
     this._bindQuit();

@@ -82,6 +82,9 @@ body { min-height: 100vh; min-height: 100dvh; }
 }
 .exercise-row .name { font-weight: 600; font-size: 0.98rem; }
 .exercise-row .detail { color: var(--text-dim); font-size: 0.85rem; margin-top: 2px; }
+/* Rest screen: what's coming, so it can be read while recovering */
+.next-up .detail { color: var(--accent); font-size: 1rem; font-weight: 600; margin-top: 3px; }
+.rest-screen .set-note { text-align: left; }
 
 .rest-day {
   text-align: center;

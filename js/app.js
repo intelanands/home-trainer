@@ -2,7 +2,7 @@
    All values interpolated into innerHTML templates are escaped via esc()
    (defined in player.js), including user-entered history notes. */
 
-const APP_VERSION = 'v16'; // cosmetic (footer display) — every load is fresh from the server now
+const APP_VERSION = 'v17'; // cosmetic (footer display) — every load is fresh from the server now
 
 const App = {
   plan: null,
