@@ -66,6 +66,32 @@ decision point on buying heavier dumbbells — noted below, not assumed.
 
 ---
 
+## The week: six days, three hard
+
+| | | |
+|---|---|---|
+| **Mon** | Full Body A | strength, ~50 min |
+| **Tue** | Reset — mobility & core | easy, ~20 min |
+| **Wed** | Full Body B | strength, ~50 min |
+| **Thu** | Easy — walk & calves | easy, ~30 min |
+| **Fri** | Full Body C | strength, ~50 min |
+| **Sat** | Easy — long walk | easy, ~35 min |
+| **Sun** | Rest | genuinely nothing |
+
+Adopted 22 Jul 2026. The reasoning matters, because the obvious alternative — six
+hard days on a body-part split — is a trap here:
+
+- A body-part split trains each muscle **once** a week. Full-body three times a week
+  trains everything **three** times. For a beginner, frequency is the bigger lever,
+  so the "more days" version would actually deliver less.
+- Six distinct hard days can't be filled with two dumbbells, a chair and some stairs.
+- Six hard days as a beginner is how people get injured or quit.
+
+Easy days exist to build the habit ("I move every day except Sunday" is a far easier
+rule than remembering which days are on), to undo desk sitting, and to build the
+walking and calf base that jogging needs. **They must stay easy** — if an easy day
+starts feeling like a workout, cut it back. Hard days hard, easy days easy.
+
 ## Phases
 
 ### Phase 1 — Groundwork · Weeks 1–4 (19 Jul – 15 Aug 2026)
@@ -73,11 +99,12 @@ decision point on buying heavier dumbbells — noted below, not assumed.
 **Purpose:** learn the movements, find the right working weights, make the habit
 stick. Not about getting strong yet.
 
-- 3 full-body sessions per week (Mon / Wed / Fri), supersets, ~45–60 min
-- Every session ends with the hip-flexor stretch (desk-job counterweight)
+- 3 strength sessions (Mon / Wed / Fri), supersets, ~50 min
+- 3 easy days (Tue / Thu / Sat), ~20–35 min — added 22 Jul
+- Every session ends with a hip-flexor stretch (desk-job counterweight)
 - Log every session; tap 😌 / 💪 / 🥵 honestly — that's what drives adjustments
 
-**Leaving Phase 1 when:** 10+ sessions logged, all working weights settled
+**Leaving Phase 1 when:** 10+ strength sessions logged, all working weights settled
 (mostly 💪 taps), knee quiet through normal training.
 
 ### Phase 2 — Build + Run Prep · Weeks 5–12 (Aug – mid Oct 2026)
@@ -85,21 +112,22 @@ stick. Not about getting strong yet.
 **Purpose:** get genuinely stronger, and build the specific tissue that makes
 jogging safe. This is the longest and most important phase.
 
-- Same 3-day structure; weights climb toward the 10 kg cap
+- Same six-day structure; weights climb toward the 10 kg cap on the strength days
 - **Calf capacity** is the priority — the #1 injury site for new runners.
   Progression: two-leg raises → single-leg → single-leg with a dumbbell
 - **Push-up ladder:** incline height comes down step by step toward the floor
 - Glute-med work (side leg raises, single-leg bridges) stays in every week —
   this is the knock-knee correction and it never graduates out
-- **The walk-jog day gets added** once the readiness gates below are met —
-  a 4th day (Saturday), starting at 1 min jog / 2 min walk × 6
+- **Saturday's long walk becomes the walk-jog day** once the readiness gates below
+  are met — same slot, jogging intervals spliced into the walk, starting at
+  1 min jog / 2 min walk × 6. No new day needed; the on-ramp is already in place.
 
 **Readiness gates for starting to jog** (all four, no exceptions):
 
 - [ ] Knee quiet for 2–4 consecutive weeks of training
 - [ ] 15+ single-leg calf raises, controlled, both sides
 - [ ] Single-leg glute bridges without the hip dropping
-- [ ] Comfortable 30-minute brisk walk
+- [ ] Comfortable 30-minute brisk walk (this is Saturday's session — the gate tests itself)
 
 **Leaving Phase 2 when:** jogging 3 × 5 min within a walk-jog session, pain-free.
 
@@ -107,7 +135,7 @@ jogging safe. This is the longest and most important phase.
 
 **Purpose:** running becomes a real activity; strength work shifts to supporting it.
 
-- 2 strength sessions + 2 runs per week
+- 2 strength sessions + 2 runs + 1–2 easy days per week (Sunday still off)
 - Walk-jog progresses toward **20–30 minutes of continuous easy jogging**
   (raise jogging time by roughly 10% a week — the classic mistake is going faster
   instead of longer; go longer, stay slow)
@@ -147,7 +175,8 @@ These hold across every phase — the daily plan may flex, these don't:
 7. **Missed a week?** Restart at ~80% of previous weights and rebuild over two
    sessions. Never resume where you left off after a break.
 8. **Life reschedules the plan, not the reverse.** Sessions can shift days; just keep
-   roughly 48 hours between them.
+   roughly 48 hours between *strength* sessions. Easy days can go anywhere, or be
+   skipped without guilt — missing them costs nothing but the habit.
 
 ## Progression rules (how weights actually change)
 
@@ -188,4 +217,7 @@ Short entries, newest last. Updated at each review.
   swapped bent-over row → supported one-arm row, Russian twist → dead bug for the
   time being. Roadmap written. Exact dumbbell inventory captured: sessions now name a
   single rod setting up front, two-handed work uses fixed pairs, and the app's ±
-  buttons snap to buildable weights only.
+  buttons snap to buildable weights only. Rod weighed at 1.5 kg, confirming the ladder.
+  **Week restructured to six days, three hard** — three easy days added (mobility &
+  core, walk & calves, long walk) after the user asked about training six days a week.
+  Strength stimulus unchanged; habit and jogging base gained.

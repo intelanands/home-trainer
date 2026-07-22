@@ -184,6 +184,8 @@ const Player = {
     const animate = b.animate ?? !isTimed;
     // Still frames must show the HELD pose: photo 0 is the rest/start
     // position, photo 1 the working position.
+    // Some entries (e.g. Brisk Walk) carry no photos — render no <img> at all
+    // rather than a broken one.
     const img = (!animate && ex?.images?.[1]) || ex?.images?.[0] || '';
     const muscles = ex ? ex.primaryMuscles.join(', ') : '';
     const pairInfo = b.group ? ' · superset' : '';
@@ -193,13 +195,13 @@ const Player = {
       <div class="player-card">
         <h2>${esc(ex?.name || b.exerciseId)}</h2>
         <div class="muscles">${esc(muscles)}</div>
-        <img id="p-img" class="anim-frame" src="${esc(img)}" alt="${esc(ex?.name || '')}">
+        ${img ? `<img id="p-img" class="anim-frame" src="${esc(img)}" alt="${esc(ex?.name || '')}">` : ''}
         <div class="set-info">Set ${st.s + 1} of ${b.sets}${pairInfo}</div>
         ${b.note ? `<div class="set-note">${esc(b.note)}</div>` : ''}
         ${isTimed ? `
           <div id="p-timer" class="timer-display working">${this._fmt(b.durationSec)}</div>
           <div class="player-actions">
-            <button class="btn" id="p-start">Start ${b.durationSec}s</button>
+            <button class="btn" id="p-start">Start ${this._durLabel(b.durationSec)}</button>
           </div>
         ` : `
           <div class="set-target">${b.reps} reps</div>
@@ -321,7 +323,7 @@ const Player = {
           </div>
         </div>` : ''}
         <div class="next-up">
-          <img class="exercise-thumb" src="${esc(nextEx?.images?.[0] || '')}" alt="">
+          ${nextEx?.images?.[0] ? `<img class="exercise-thumb" src="${esc(nextEx.images[0])}" alt="">` : ''}
           <div>
             <div class="name">${esc(nextLabel)}</div>
           </div>
@@ -413,5 +415,10 @@ const Player = {
     const m = Math.floor(sec / 60);
     const s = sec % 60;
     return m > 0 ? `${m}:${String(s).padStart(2, '0')}` : `${s}`;
+  },
+
+  /* Button label: "40s" for holds, "20 min" for a walk. */
+  _durLabel(sec) {
+    return sec >= 60 ? `${Math.round(sec / 60)} min` : `${sec}s`;
   },
 };

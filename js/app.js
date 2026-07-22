@@ -2,7 +2,7 @@
    All values interpolated into innerHTML templates are escaped via esc()
    (defined in player.js), including user-entered history notes. */
 
-const APP_VERSION = 'v15'; // cosmetic (footer display) — every load is fresh from the server now
+const APP_VERSION = 'v16'; // cosmetic (footer display) — every load is fresh from the server now
 
 const App = {
   plan: null,
@@ -25,9 +25,11 @@ const App = {
     }
 
     try {
+      // no-store: never run on a stale plan or exercise library. Production
+      // nginx sends no-store too, but the app shouldn't depend on that.
       const [plan, exercises] = await Promise.all([
-        fetch('./data/plan.json').then(r => r.json()),
-        fetch('./data/exercises.json').then(r => r.json()),
+        fetch('./data/plan.json', { cache: 'no-store' }).then(r => r.json()),
+        fetch('./data/exercises.json', { cache: 'no-store' }).then(r => r.json()),
       ]);
       this.plan = plan;
       for (const ex of exercises) this.exercisesById[ex.id] = ex;
@@ -141,7 +143,7 @@ const App = {
       const ex = this.exercisesById[b.exerciseId];
       return `
         <div class="exercise-row">
-          <img class="exercise-thumb" src="${esc(ex?.images?.[0] || '')}" alt="" loading="lazy">
+          ${ex?.images?.[0] ? `<img class="exercise-thumb" src="${esc(ex.images[0])}" alt="" loading="lazy">` : ''}
           <div>
             <div class="name">${esc(ex?.name || b.exerciseId)}</div>
             <div class="detail">${esc(this.blockDetail(b))}</div>

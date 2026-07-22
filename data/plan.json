@@ -9,15 +9,15 @@
       "bench-like furniture"
     ],
     "weights": [1, 1.5, 2.5, 4, 5, 6.5, 7.5, 9, 10],
-    "notes": "Home training. Weights are per hand. DISKS ARE NOT CHANGED MID-SESSION: each session's equipment list states the one rod setting to make before starting, and every two-handed exercise uses a fixed pair (1 / 2.5 / 5 kg). Rod maths — take the disks on ONE side, double it (two sides per hand), add the 1.5 kg rod: nothing → 1.5, 0.5 → 2.5, 1.25 → 4, 0.5+1.25 → 5, 2.5 → 6.5, 2.5+0.5 → 7.5, 2.5+1.25 → 9, 2.5+1.25+0.5 → 10. Knock knees (mild, noted Jul 2026) → cue knees OUT on every squat/lunge/step-up, and keep glute-med work (side leg raises, single-leg bridges) in every week. Left knee: mild discomfort on twists (noted Jul 2026) — knee work stays in pain-free range, no knee caving inward, no loaded twisting. Desk job (sits all day) → hip-flexor stretch every cooldown. Goal: start jogging — building calf capacity now; add a Saturday walk-jog day after 2-4 knee-quiet weeks. Sessions use supersets (blocks sharing a group interleave sets). Long-term plan: see ROADMAP.md."
+    "notes": "Home training. Weights are per hand. DISKS ARE NOT CHANGED MID-SESSION: each session's equipment list states the one rod setting to make before starting, and every two-handed exercise uses a fixed pair (1 / 2.5 / 5 kg). Rod maths — take the disks on ONE side, double it (two sides per hand), add the 1.5 kg rod: nothing → 1.5, 0.5 → 2.5, 1.25 → 4, 0.5+1.25 → 5, 2.5 → 6.5, 2.5+0.5 → 7.5, 2.5+1.25 → 9, 2.5+1.25+0.5 → 10. Knock knees (mild, noted Jul 2026) → cue knees OUT on every squat/lunge/step-up, and keep glute-med work (side leg raises, single-leg bridges) in every week. Left knee: mild discomfort on twists (noted Jul 2026) — knee work stays in pain-free range, no knee caving inward, no loaded twisting. Desk job (sits all day) → hip-flexor stretch every cooldown. Goal: start jogging — building calf capacity now; add a Saturday walk-jog day after 2-4 knee-quiet weeks. Sessions use supersets (blocks sharing a group interleave sets). SIX DAYS, THREE HARD: Mon/Wed/Fri are the strength sessions; Tue/Thu/Sat are short easy days (mobility, core, calves, walking) that build the habit and the jogging base without adding recovery load; Sunday is a real rest day. Keep easy days easy — if they start feeling like workouts, cut them back. Long-term plan: see ROADMAP.md."
   },
   "schedule": {
     "mon": "full-body-a",
-    "tue": "rest",
+    "tue": "reset-mobility",
     "wed": "full-body-b",
-    "thu": "rest",
+    "thu": "easy-walk",
     "fri": "full-body-c",
-    "sat": "rest",
+    "sat": "long-walk",
     "sun": "rest"
   },
   "sessions": {
@@ -64,6 +64,42 @@
         { "exerciseId": "Side_Lateral_Raise", "sets": 3, "reps": 10, "weightKg": 2.5, "restSec": 60, "group": "D", "note": "Fixed 2.5 kg pair — light on purpose, strict form beats weight here" },
         { "exerciseId": "Dead_Bug", "sets": 3, "reps": 10, "restSec": 45, "group": "D", "note": "Slow — lower back stays pressed into the mat. Replaces Russian twists while your back settles" },
         { "exerciseId": "All_Fours_Quad_Stretch", "sets": 2, "durationSec": 30, "restSec": 15, "note": "Cooldown, one set per leg — opens hips after desk sitting" }
+      ]
+    },
+    "reset-mobility": {
+      "title": "Reset — Mobility & Core",
+      "equipment": ["Yoga mat", "Water bottle"],
+      "blocks": [
+        { "exerciseId": "Arm_Circles", "sets": 2, "durationSec": 30, "restSec": 10, "note": "Easy day. Loosen the shoulders — 15 sec forwards, 15 sec backwards", "animate": true },
+        { "exerciseId": "Cat_Stretch", "sets": 2, "durationSec": 40, "restSec": 15, "note": "Round and arch slowly with your breathing — undoes a day at the desk", "animate": true },
+        { "exerciseId": "Kneeling_Hip_Flexor", "sets": 2, "durationSec": 40, "restSec": 15, "note": "One set per side. THE stretch for sitting all day — squeeze the back glute and stand tall" },
+        { "exerciseId": "Lying_Glute", "sets": 2, "durationSec": 30, "restSec": 15, "note": "One set per side, gentle" },
+        { "exerciseId": "Butt_Lift_Bridge", "sets": 2, "reps": 12, "restSec": 30, "note": "Squeeze at the top — waking the glutes up, not tiring them out" },
+        { "exerciseId": "Dead_Bug", "sets": 2, "reps": 10, "restSec": 30, "note": "Slow, lower back pressed into the mat" },
+        { "exerciseId": "Side_Bridge", "sets": 2, "durationSec": 25, "restSec": 20, "note": "One set per side" },
+        { "exerciseId": "Childs_Pose", "sets": 1, "durationSec": 60, "restSec": 10, "note": "Finish here. Breathe out slowly and let the back settle" }
+      ]
+    },
+    "easy-walk": {
+      "title": "Easy — Walk & Calves",
+      "equipment": ["Comfortable shoes", "Yoga mat (for the stretches)", "Fixed 5 kg pair (calf raises)", "Water bottle"],
+      "blocks": [
+        { "exerciseId": "Brisk_Walk", "sets": 1, "durationSec": 1200, "restSec": 60, "note": "20 minutes, conversational pace. Take the phone and go — the timer runs in your pocket" },
+        { "exerciseId": "Standing_Dumbbell_Calf_Raise", "sets": 3, "reps": 15, "weightKg": 5, "restSec": 45, "note": "Fixed 5 kg pair. Slow 3-sec lowering — calves take frequent work well, and they're the jogging bottleneck" },
+        { "exerciseId": "Side_Leg_Raises", "sets": 2, "reps": 12, "restSec": 30, "note": "Per side — the knock-knee correction, little and often" },
+        { "exerciseId": "Standing_Soleus_And_Achilles_Stretch", "sets": 2, "durationSec": 30, "restSec": 15, "note": "One set per side — the achilles is what complains first when new runners add mileage" },
+        { "exerciseId": "Kneeling_Hip_Flexor", "sets": 2, "durationSec": 40, "restSec": 15, "note": "One set per side" }
+      ]
+    },
+    "long-walk": {
+      "title": "Easy — Long Walk",
+      "equipment": ["Comfortable shoes", "Yoga mat (for the stretches)", "Water bottle"],
+      "blocks": [
+        { "exerciseId": "Brisk_Walk", "sets": 1, "durationSec": 1800, "restSec": 60, "note": "30 minutes, conversational pace. This IS the jogging readiness test — when it feels easy, the walk-jog day starts here" },
+        { "exerciseId": "Standing_Soleus_And_Achilles_Stretch", "sets": 2, "durationSec": 30, "restSec": 15, "note": "One set per side" },
+        { "exerciseId": "90_90_Hamstring", "sets": 2, "durationSec": 30, "restSec": 15, "note": "One set per leg" },
+        { "exerciseId": "Kneeling_Hip_Flexor", "sets": 2, "durationSec": 40, "restSec": 15, "note": "One set per side" },
+        { "exerciseId": "Childs_Pose", "sets": 1, "durationSec": 60, "restSec": 10, "note": "Finish here" }
       ]
     },
     "full-body-c": {
