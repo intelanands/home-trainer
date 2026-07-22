@@ -249,8 +249,8 @@ const Player = {
       document.getElementById('reps-plus').onclick = () => { reps += 1; repsVal.textContent = reps; };
       if (b.weightKg != null) {
         const wtVal = document.getElementById('wt-val');
-        document.getElementById('wt-minus').onclick = () => { wt = Math.max(0, wt - 1); wtVal.textContent = wt; };
-        document.getElementById('wt-plus').onclick = () => { wt += 1; wtVal.textContent = wt; };
+        document.getElementById('wt-minus').onclick = () => { wt = this._stepWeight(wt, -1); wtVal.textContent = wt; };
+        document.getElementById('wt-plus').onclick = () => { wt = this._stepWeight(wt, +1); wtVal.textContent = wt; };
       }
       document.getElementById('p-done').onclick = () => {
         const set = { reps };
@@ -258,6 +258,20 @@ const Player = {
         this._completeSet(set);
       };
     }
+  },
+
+  /* The ± weight buttons walk athlete.weights — the loads this kit can
+     actually be built to (fixed pairs plus rod combinations), so the app
+     never offers a weight that can't be assembled. Falls back to 1 kg
+     steps when a plan lists no inventory. */
+  _stepWeight(current, dir) {
+    const list = App.plan?.athlete?.weights;
+    if (!Array.isArray(list) || !list.length) return Math.max(0, current + dir);
+    const sorted = [...list].sort((a, b) => a - b);
+    const next = dir > 0
+      ? sorted.find(w => w > current + 1e-9)
+      : sorted.slice().reverse().find(w => w < current - 1e-9);
+    return next ?? current;
   },
 
   _completeSet(setResult) {

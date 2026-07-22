@@ -12,18 +12,47 @@ Started: **19 July 2026**. Reviewed monthly against `history.jsonl`.
 
 | | |
 |---|---|
-| Training at | Home — 2× dumbbells ≤10 kg, yoga mat, stairs, chair, bench-like furniture |
+| Training at | Home — dumbbells (see below), yoga mat, stairs, chair, bench-like furniture |
 | Lifestyle | Desk job, sitting most of the day |
 | Body notes | Mild knock knees (genu valgum); left knee twinges on unexpected twists |
 | Starting point | New to structured training. Legs and rows decent; pressing weak (incline push-ups) |
 | Main goal | **Be able to jog comfortably**, without knee trouble |
 | Secondary | General strength, undo desk posture, stay injury-free |
 
-## The one constraint that shapes everything
+## The equipment, exactly
 
-Dumbbells stop at **10 kg per hand**. Within a few months that stops being heavy
-for legs and back. So the long-term progression is **not** "keep adding weight" —
-it's, in order of preference:
+| Implement | Gives you (per hand) |
+|---|---|
+| Fixed pairs | 1 · 2.5 · **5 kg** |
+| 2 rods (~1.5 kg each) + disks: 4× 0.5, 4× 1.25, 4× 2.5 | 1.5 · 2.5 · 4 · 5 · 6.5 · 7.5 · 9 · **10 kg** |
+
+Rod maths: **take the disks on one side, double it, add the rod.** Each hand gets one
+disk of each size per side, so the top rung is everything loaded — 8.5 kg of plates
+plus the 1.5 kg rod = 10 kg.
+
+| Each side | Per hand | | Each side | Per hand |
+|---|---|---|---|---|
+| — | 1.5 | | 2.5 | 6.5 |
+| 0.5 | 2.5 | | 2.5 + 0.5 | 7.5 |
+| 1.25 | 4 | | 2.5 + 1.25 | 9 |
+| 0.5 + 1.25 | 5 | | 2.5 + 1.25 + 0.5 | 10 |
+
+(The rod's own weight is inferred from the set totalling a round 20 kg — 17 kg of
+plates plus two 1.5 kg rods. If a bare rod actually weighs 1.25 kg, every rod number
+above drops by 0.25 kg; the disk instructions stay correct either way.)
+
+**The working rule:** disks don't get changed mid-workout. Each session names *one*
+rod setting to build beforehand (it's on the Get Ready checklist), and every
+two-handed exercise uses a fixed pair. The two rods can hold different weights when
+only one hand is loaded at a time.
+
+## The constraint that shapes everything
+
+Two-handed work is effectively capped at **5 kg per hand** (the heaviest fixed pair)
+unless the session's rod setting is the matched pair, and the absolute ceiling is
+**10 kg per hand**. Within a few months that stops being heavy for legs and back.
+So the long-term progression is **not** "keep adding weight" — it's, in order of
+preference:
 
 1. **Add reps** within the target range
 2. **Slow the lowering phase** (3 seconds down makes 5 kg feel like 8)
@@ -86,8 +115,9 @@ jogging safe. This is the longest and most important phase.
 - Strength emphasis moves to single-leg work, since bilateral lifts have outgrown
   10 kg dumbbells
 - **Optional decision point:** if you're enjoying this and want to keep getting
-  stronger, adjustable dumbbells (up to ~20 kg) or a loadable backpack removes the
-  ceiling. Not required — the plan works without it, just with slower strength gains.
+  stronger, the cheap upgrade is **more 2.5 kg disks** for the existing rods (not new
+  dumbbells) — or a loadable backpack for squats and step-ups. Not required; the plan
+  works without it, just with slower strength gains after the 10 kg ceiling.
 
 ### Phase 4 — Consolidate · Month 7+ (Feb 2027 →)
 
@@ -157,4 +187,6 @@ Short entries, newest last. Updated at each review.
   incline push-ups (a real ladder, unlike knee push-ups).
 - **22 Jul 2026** — Back tweaked outside training (moved wrong on Tuesday). Session B
   swapped bent-over row → supported one-arm row, Russian twist → dead bug for the
-  time being. Roadmap written.
+  time being. Roadmap written. Exact dumbbell inventory captured: sessions now name a
+  single rod setting up front, two-handed work uses fixed pairs, and the app's ±
+  buttons snap to buildable weights only.

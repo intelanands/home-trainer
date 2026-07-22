@@ -1,7 +1,15 @@
 {
   "athlete": {
-    "equipment": ["2x dumbbells up to 10kg", "yoga mat", "stairs", "chair", "bench-like furniture"],
-    "notes": "Home training. Weights are per dumbbell. Adjust in chat with Claude anytime. Knock knees (mild, noted Jul 2026) → cue knees OUT on every squat/lunge/step-up, and keep glute-med work (side leg raises, single-leg bridges) in every week. Left knee: mild discomfort on twists (noted Jul 2026) — knee work stays in pain-free range, no knee caving inward, no loaded twisting. Desk job (sits all day) → hip-flexor stretch every cooldown. Goal: start jogging — building calf capacity now; add a Saturday walk-jog day after 2-4 knee-quiet weeks. Sessions use supersets (blocks sharing a group interleave sets)."
+    "equipment": [
+      "Fixed dumbbell pairs: 1 kg, 2.5 kg, 5 kg",
+      "2 adjustable rods (~1.5 kg each) + disks: 4x 0.5 kg, 4x 1.25 kg, 4x 2.5 kg (2 of each size per hand)",
+      "yoga mat",
+      "stairs",
+      "chair",
+      "bench-like furniture"
+    ],
+    "weights": [1, 1.5, 2.5, 4, 5, 6.5, 7.5, 9, 10],
+    "notes": "Home training. Weights are per hand. DISKS ARE NOT CHANGED MID-SESSION: each session's equipment list states the one rod setting to make before starting, and every two-handed exercise uses a fixed pair (1 / 2.5 / 5 kg). Rod maths — take the disks on ONE side, double it (two sides per hand), add the ~1.5 kg rod: nothing → 1.5, 0.5 → 2.5, 1.25 → 4, 0.5+1.25 → 5, 2.5 → 6.5, 2.5+0.5 → 7.5, 2.5+1.25 → 9, 2.5+1.25+0.5 → 10. Knock knees (mild, noted Jul 2026) → cue knees OUT on every squat/lunge/step-up, and keep glute-med work (side leg raises, single-leg bridges) in every week. Left knee: mild discomfort on twists (noted Jul 2026) — knee work stays in pain-free range, no knee caving inward, no loaded twisting. Desk job (sits all day) → hip-flexor stretch every cooldown. Goal: start jogging — building calf capacity now; add a Saturday walk-jog day after 2-4 knee-quiet weeks. Sessions use supersets (blocks sharing a group interleave sets). Long-term plan: see ROADMAP.md."
   },
   "schedule": {
     "mon": "full-body-a",
@@ -15,16 +23,22 @@
   "sessions": {
     "full-body-a": {
       "title": "Full Body A — Squat & Push",
-      "equipment": ["Yoga mat", "Sturdy chair (incline push-ups + rows)", "Water bottle"],
+      "equipment": [
+        "Yoga mat",
+        "Sturdy chair (incline push-ups + rows)",
+        "Fixed 5 kg pair",
+        "SET BEFORE YOU START: one rod at 7.5 kg — a 2.5 kg + a 0.5 kg disk on each side (for one-arm rows)",
+        "Water bottle"
+      ],
       "blocks": [
         { "exerciseId": "Inchworm", "sets": 2, "reps": 8, "restSec": 30, "note": "Warm-up, go slow" },
         { "exerciseId": "Bodyweight_Squat", "sets": 2, "reps": 15, "restSec": 45, "note": "Warm-up pace" },
-        { "exerciseId": "Dumbbell_Squat", "sets": 3, "reps": 12, "weightKg": 5, "restSec": 60, "group": "A", "note": "PUSH KNEES OUT as you stand — the key cue for knock knees" },
+        { "exerciseId": "Dumbbell_Squat", "sets": 3, "reps": 12, "weightKg": 5, "restSec": 60, "group": "A", "note": "Fixed 5 kg pair. PUSH KNEES OUT as you stand — the key cue for knock knees" },
         { "exerciseId": "Incline_Push-Up", "sets": 3, "reps": 8, "restSec": 60, "group": "A", "note": "Hands on a chair seat — the higher the hands, the easier. Build here before going to the floor" },
         { "exerciseId": "Single_Leg_Glute_Bridge", "sets": 3, "reps": 10, "restSec": 45, "group": "B", "note": "Per leg — hips level, knee pointing straight up. Direct work against knock knees" },
-        { "exerciseId": "One-Arm_Dumbbell_Row", "sets": 3, "reps": 12, "weightKg": 8, "restSec": 60, "group": "B", "note": "Per arm, brace on chair" },
-        { "exerciseId": "Standing_Dumbbell_Press", "sets": 3, "reps": 8, "weightKg": 5, "restSec": 60, "group": "C" },
-        { "exerciseId": "Standing_Dumbbell_Calf_Raise", "sets": 2, "reps": 15, "weightKg": 5, "restSec": 45, "group": "C", "note": "Slow 3-sec lowering — building toward jogging" },
+        { "exerciseId": "One-Arm_Dumbbell_Row", "sets": 3, "reps": 12, "weightKg": 7.5, "restSec": 60, "group": "B", "note": "The loaded rod, per arm, free hand braced on the chair" },
+        { "exerciseId": "Standing_Dumbbell_Press", "sets": 3, "reps": 8, "weightKg": 5, "restSec": 60, "group": "C", "note": "Fixed 5 kg pair" },
+        { "exerciseId": "Standing_Dumbbell_Calf_Raise", "sets": 2, "reps": 15, "weightKg": 5, "restSec": 45, "group": "C", "note": "Fixed 5 kg pair. Slow 3-sec lowering — building toward jogging" },
         { "exerciseId": "Plank", "sets": 3, "durationSec": 40, "restSec": 45 },
         { "exerciseId": "90_90_Hamstring", "sets": 2, "durationSec": 30, "restSec": 15, "note": "Cooldown, one set per leg" },
         { "exerciseId": "All_Fours_Quad_Stretch", "sets": 2, "durationSec": 30, "restSec": 15, "note": "Cooldown, one set per leg — opens hips after desk sitting" }
@@ -32,32 +46,45 @@
     },
     "full-body-b": {
       "title": "Full Body B — Lunge & Pull",
-      "equipment": ["Yoga mat", "Sturdy chair (rows, bench dips, seated calf raises)", "Water bottle"],
+      "equipment": [
+        "Yoga mat",
+        "Sturdy chair (rows, bench dips, seated calf raises)",
+        "Fixed 5 kg pair + fixed 2.5 kg pair",
+        "SET BEFORE YOU START: one rod at 7.5 kg — a 2.5 kg + a 0.5 kg disk on each side (rows + seated calf raises)",
+        "Water bottle"
+      ],
       "blocks": [
         { "exerciseId": "Inchworm", "sets": 2, "reps": 8, "restSec": 30, "note": "Warm-up, go slow" },
-        { "exerciseId": "Dumbbell_Rear_Lunge", "sets": 3, "reps": 10, "weightKg": 5, "restSec": 60, "group": "A", "note": "10 per leg — step BACK, front shin vertical, knee tracks over the middle toe (don't let it drift inward)" },
-        { "exerciseId": "Dumbbell_Floor_Press", "sets": 3, "reps": 10, "weightKg": 5, "restSec": 60, "group": "A", "note": "On the mat — lie down, back fully supported" },
+        { "exerciseId": "Dumbbell_Rear_Lunge", "sets": 3, "reps": 10, "weightKg": 5, "restSec": 60, "group": "A", "note": "Fixed 5 kg pair, 10 per leg — step BACK, front shin vertical, knee tracks over the middle toe" },
+        { "exerciseId": "Dumbbell_Floor_Press", "sets": 3, "reps": 10, "weightKg": 5, "restSec": 60, "group": "A", "note": "Fixed 5 kg pair, on the mat — back fully supported" },
         { "exerciseId": "Side_Leg_Raises", "sets": 3, "reps": 12, "restSec": 45, "group": "B", "note": "Per side, slow — side-glute work that pulls the knees back out into line" },
-        { "exerciseId": "One-Arm_Dumbbell_Row", "sets": 3, "reps": 12, "weightKg": 8, "restSec": 60, "group": "B", "note": "Per arm, brace your free hand on the chair — supported, so it spares the lower back" },
+        { "exerciseId": "One-Arm_Dumbbell_Row", "sets": 3, "reps": 12, "weightKg": 7.5, "restSec": 60, "group": "B", "note": "The loaded rod, per arm, free hand braced on the chair — supported, so it spares the lower back" },
         { "exerciseId": "Bench_Dips", "sets": 3, "reps": 10, "restSec": 60, "group": "C", "note": "Use a sturdy chair — bend your knees and keep feet close for an easier version" },
-        { "exerciseId": "Dumbbell_Seated_One-Leg_Calf_Raise", "sets": 2, "reps": 12, "weightKg": 8, "restSec": 45, "group": "C", "note": "Per leg — rest the dumbbell on your thigh just ABOVE the knee, never on the kneecap" },
-        { "exerciseId": "Side_Lateral_Raise", "sets": 3, "reps": 10, "weightKg": 4, "restSec": 60, "group": "D", "note": "Light weight, strict form" },
+        { "exerciseId": "Dumbbell_Seated_One-Leg_Calf_Raise", "sets": 2, "reps": 12, "weightKg": 7.5, "restSec": 45, "group": "C", "note": "The loaded rod, per leg — rest it on your thigh just ABOVE the knee, never on the kneecap" },
+        { "exerciseId": "Side_Lateral_Raise", "sets": 3, "reps": 10, "weightKg": 2.5, "restSec": 60, "group": "D", "note": "Fixed 2.5 kg pair — light on purpose, strict form beats weight here" },
         { "exerciseId": "Dead_Bug", "sets": 3, "reps": 10, "restSec": 45, "group": "D", "note": "Slow — lower back stays pressed into the mat. Replaces Russian twists while your back settles" },
         { "exerciseId": "All_Fours_Quad_Stretch", "sets": 2, "durationSec": 30, "restSec": 15, "note": "Cooldown, one set per leg — opens hips after desk sitting" }
       ]
     },
     "full-body-c": {
       "title": "Full Body C — Hinge & Carry",
-      "equipment": ["Yoga mat", "Clear space at the stairs (step-ups + incline push-ups)", "Chair or bench (seated press)", "Water bottle"],
+      "equipment": [
+        "Yoga mat",
+        "Clear space at the stairs (step-ups + incline push-ups)",
+        "Chair or bench (seated press)",
+        "Fixed 5 kg pair + fixed 2.5 kg pair",
+        "SET BEFORE YOU START: both rods at 6.5 kg — one 2.5 kg disk on each side (for deadlifts)",
+        "Water bottle"
+      ],
       "blocks": [
         { "exerciseId": "Inchworm", "sets": 2, "reps": 8, "restSec": 30, "note": "Warm-up, go slow" },
-        { "exerciseId": "Dumbbell_Step_Ups", "sets": 3, "reps": 10, "weightKg": 5, "restSec": 60, "group": "A", "note": "Bottom stair, 10 per leg — push through the heel and keep the knee from caving inward" },
+        { "exerciseId": "Dumbbell_Step_Ups", "sets": 3, "reps": 10, "weightKg": 5, "restSec": 60, "group": "A", "note": "Fixed 5 kg pair, bottom stair, 10 per leg — push through the heel, don't let the knee cave inward" },
         { "exerciseId": "Incline_Push-Up", "sets": 3, "reps": 8, "restSec": 60, "group": "A", "note": "Hands on the stairs, slightly wider than shoulders — pick a step height where 8 reps are clean" },
-        { "exerciseId": "Stiff-Legged_Dumbbell_Deadlift", "sets": 3, "reps": 12, "weightKg": 5, "restSec": 60, "group": "B", "note": "Hinge at hips, soft knees, flat back — skip this one if your back is complaining" },
-        { "exerciseId": "Seated_Dumbbell_Press", "sets": 3, "reps": 8, "weightKg": 5, "restSec": 60, "group": "B", "note": "Sit on chair or bench" },
-        { "exerciseId": "Dumbbell_Bicep_Curl", "sets": 2, "reps": 12, "weightKg": 5, "restSec": 45, "group": "C" },
-        { "exerciseId": "Tricep_Dumbbell_Kickback", "sets": 2, "reps": 12, "weightKg": 4, "restSec": 45, "group": "C" },
-        { "exerciseId": "Standing_Dumbbell_Calf_Raise", "sets": 3, "reps": 15, "weightKg": 5, "restSec": 45, "group": "D", "note": "Slow down-phase — when 3x15 feels easy, tell Claude to progress to single-leg" },
+        { "exerciseId": "Stiff-Legged_Dumbbell_Deadlift", "sets": 3, "reps": 12, "weightKg": 6.5, "restSec": 60, "group": "B", "note": "Both rods. Hinge at hips, soft knees, flat back — skip this one if your back is complaining" },
+        { "exerciseId": "Seated_Dumbbell_Press", "sets": 3, "reps": 8, "weightKg": 5, "restSec": 60, "group": "B", "note": "Fixed 5 kg pair, sitting on the chair or bench" },
+        { "exerciseId": "Dumbbell_Bicep_Curl", "sets": 2, "reps": 12, "weightKg": 5, "restSec": 45, "group": "C", "note": "Fixed 5 kg pair" },
+        { "exerciseId": "Tricep_Dumbbell_Kickback", "sets": 2, "reps": 12, "weightKg": 2.5, "restSec": 45, "group": "C", "note": "Fixed 2.5 kg pair" },
+        { "exerciseId": "Standing_Dumbbell_Calf_Raise", "sets": 3, "reps": 15, "weightKg": 5, "restSec": 45, "group": "D", "note": "Fixed 5 kg pair. Slow down-phase — when 3x15 feels easy, ask Claude for the single-leg version" },
         { "exerciseId": "Dead_Bug", "sets": 3, "reps": 10, "restSec": 45, "group": "D", "note": "Slow and controlled" },
         { "exerciseId": "Side_Bridge", "sets": 2, "durationSec": 30, "restSec": 30, "note": "One set per side" },
         { "exerciseId": "All_Fours_Quad_Stretch", "sets": 2, "durationSec": 30, "restSec": 15, "note": "Cooldown, one set per leg — opens hips after desk sitting" }

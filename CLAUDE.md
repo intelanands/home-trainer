@@ -45,6 +45,7 @@ Don't let the two drift apart.
 
 ## plan.json contract
 
+- `athlete.weights`: the per-hand loads this kit can actually be built to. Drives the player's ± weight stepper (it snaps to this list, never 1 kg steps). **Only ever prescribe weights from this list.** The user does not re-load disks mid-session, so each session's `equipment` must name the one rod setting to build beforehand, expressed as *disks per side* (robust to the rod's exact weight), and every two-handed exercise must use a fixed pair (1 / 2.5 / 5 kg).
 - `schedule`: weekday keys `mon`..`sun` → session key or `"rest"`
 - `sessions.<key>`: `{ title, equipment?, blocks: [...] }`
   - `equipment`: strings shown on the pre-workout "Get ready" checklist (mat, chair, stairs…). Dumbbell weights are derived automatically from the blocks — don't list them here. Keep this in sync when changing a session's exercises.
