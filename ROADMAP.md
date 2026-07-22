@@ -24,7 +24,7 @@ Started: **19 July 2026**. Reviewed monthly against `history.jsonl`.
 | Implement | Gives you (per hand) |
 |---|---|
 | Fixed pairs | 1 · 2.5 · **5 kg** |
-| 2 rods (~1.5 kg each) + disks: 4× 0.5, 4× 1.25, 4× 2.5 | 1.5 · 2.5 · 4 · 5 · 6.5 · 7.5 · 9 · **10 kg** |
+| 2 rods (1.5 kg each) + disks: 4× 0.5, 4× 1.25, 4× 2.5 | 1.5 · 2.5 · 4 · 5 · 6.5 · 7.5 · 9 · **10 kg** |
 
 Rod maths: **take the disks on one side, double it, add the rod.** Each hand gets one
 disk of each size per side, so the top rung is everything loaded — 8.5 kg of plates
@@ -37,9 +37,8 @@ plus the 1.5 kg rod = 10 kg.
 | 1.25 | 4 | | 2.5 + 1.25 | 9 |
 | 0.5 + 1.25 | 5 | | 2.5 + 1.25 + 0.5 | 10 |
 
-(The rod's own weight is inferred from the set totalling a round 20 kg — 17 kg of
-plates plus two 1.5 kg rods. If a bare rod actually weighs 1.25 kg, every rod number
-above drops by 0.25 kg; the disk instructions stay correct either way.)
+(Rod weight **measured on a scale, 22 Jul 2026: 1.5 kg** — so the set is a standard
+20 kg kit, 17 kg of plates plus two rods, and every number above is exact.)
 
 **The working rule:** disks don't get changed mid-workout. Each session names *one*
 rod setting to build beforehand (it's on the Get Ready checklist), and every

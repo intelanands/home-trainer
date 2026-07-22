@@ -2,14 +2,14 @@
   "athlete": {
     "equipment": [
       "Fixed dumbbell pairs: 1 kg, 2.5 kg, 5 kg",
-      "2 adjustable rods (~1.5 kg each) + disks: 4x 0.5 kg, 4x 1.25 kg, 4x 2.5 kg (2 of each size per hand)",
+      "2 adjustable rods (1.5 kg each, weighed) + disks: 4x 0.5 kg, 4x 1.25 kg, 4x 2.5 kg (2 of each size per hand)",
       "yoga mat",
       "stairs",
       "chair",
       "bench-like furniture"
     ],
     "weights": [1, 1.5, 2.5, 4, 5, 6.5, 7.5, 9, 10],
-    "notes": "Home training. Weights are per hand. DISKS ARE NOT CHANGED MID-SESSION: each session's equipment list states the one rod setting to make before starting, and every two-handed exercise uses a fixed pair (1 / 2.5 / 5 kg). Rod maths — take the disks on ONE side, double it (two sides per hand), add the ~1.5 kg rod: nothing → 1.5, 0.5 → 2.5, 1.25 → 4, 0.5+1.25 → 5, 2.5 → 6.5, 2.5+0.5 → 7.5, 2.5+1.25 → 9, 2.5+1.25+0.5 → 10. Knock knees (mild, noted Jul 2026) → cue knees OUT on every squat/lunge/step-up, and keep glute-med work (side leg raises, single-leg bridges) in every week. Left knee: mild discomfort on twists (noted Jul 2026) — knee work stays in pain-free range, no knee caving inward, no loaded twisting. Desk job (sits all day) → hip-flexor stretch every cooldown. Goal: start jogging — building calf capacity now; add a Saturday walk-jog day after 2-4 knee-quiet weeks. Sessions use supersets (blocks sharing a group interleave sets). Long-term plan: see ROADMAP.md."
+    "notes": "Home training. Weights are per hand. DISKS ARE NOT CHANGED MID-SESSION: each session's equipment list states the one rod setting to make before starting, and every two-handed exercise uses a fixed pair (1 / 2.5 / 5 kg). Rod maths — take the disks on ONE side, double it (two sides per hand), add the 1.5 kg rod: nothing → 1.5, 0.5 → 2.5, 1.25 → 4, 0.5+1.25 → 5, 2.5 → 6.5, 2.5+0.5 → 7.5, 2.5+1.25 → 9, 2.5+1.25+0.5 → 10. Knock knees (mild, noted Jul 2026) → cue knees OUT on every squat/lunge/step-up, and keep glute-med work (side leg raises, single-leg bridges) in every week. Left knee: mild discomfort on twists (noted Jul 2026) — knee work stays in pain-free range, no knee caving inward, no loaded twisting. Desk job (sits all day) → hip-flexor stretch every cooldown. Goal: start jogging — building calf capacity now; add a Saturday walk-jog day after 2-4 knee-quiet weeks. Sessions use supersets (blocks sharing a group interleave sets). Long-term plan: see ROADMAP.md."
   },
   "schedule": {
     "mon": "full-body-a",
