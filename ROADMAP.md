@@ -122,6 +122,16 @@ jogging safe. This is the longest and most important phase.
   are met — same slot, jogging intervals spliced into the walk, starting at
   1 min jog / 2 min walk × 6. No new day needed; the on-ramp is already in place.
 
+- **Deferred to this phase: Strava sync.** Samsung Health syncs to Strava (Services
+  tab), and Strava has a public OAuth API — so walks and runs can log themselves with
+  distance, pace and heart rate. Deliberately not built in Phase 1 (July 2026): while
+  walks are the whole cardio plan, "walked 30 min" tells the program everything it
+  needs. Build it when jogging starts and pace/distance actually drive decisions.
+  Design agreed: user registers a personal app at strava.com/settings/api, refresh
+  token stored `chmod 600` in `/opt/home-trainer-data/`, a stdlib-only fetcher on a
+  daily cron appending to `strava.jsonl` — same shape as the history API. Note Samsung
+  Health → Strava carries *activities* only; steps, sleep and resting HR stay behind.
+
 **Readiness gates for starting to jog** (all four, no exceptions):
 
 - [ ] Knee quiet for 2–4 consecutive weeks of training
