@@ -19,6 +19,14 @@ Started: **19 July 2026**. Reviewed monthly against `history.jsonl`.
 | Main goal | **Be able to jog comfortably**, without knee trouble |
 | Secondary | General strength, undo desk posture, stay injury-free |
 
+**Baseline, 22 Jul 2026** (from Samsung Health — compare against these, don't re-guess):
+
+| Measure | Starting value | Reading |
+|---|---|---|
+| Daily steps | **~3,000** | Sedentary (under 5,000). The walk days roughly double a typical day. |
+| Heart rate, daily min | **50 bpm** (21 Jul) | Healthy. This is the RHR proxy — track the *minimum*, not the daily average. |
+| Heart rate, daily avg | 70 bpm, range 50–90 | Unremarkable; listed only so a future comparison isn't confused by it. |
+
 ## The equipment, exactly
 
 | Implement | Gives you (per hand) |
@@ -168,6 +176,19 @@ No need to decide now. Reassess when you get here.
 
 ---
 
+## The daily baseline (outside the sessions)
+
+At ~3,000 steps a day, the highest-value thing outside training isn't more training —
+it's **breaking up the sitting**. Two or three minutes of movement every hour or so
+adds 1,500–2,000 steps a day on its own, which is a bigger change than any single
+workout, and the frequent hip and knee movement is exactly what a desk-bound body
+with knock knees needs.
+
+Rough target: get typical *non-walk* days from 3,000 to around **5,000 steps** over
+the next month or two. Stairs instead of lifts, a lap while on calls, walking to
+things that could be driven to. No tracking discipline needed — the trend is what
+matters, not any individual day.
+
 ## Rules that don't change
 
 These hold across every phase — the daily plan may flex, these don't:
@@ -230,4 +251,6 @@ Short entries, newest last. Updated at each review.
   buttons snap to buildable weights only. Rod weighed at 1.5 kg, confirming the ladder.
   **Week restructured to six days, three hard** — three easy days added (mobility &
   core, walk & calves, long walk) after the user asked about training six days a week.
-  Strength stimulus unchanged; habit and jogging base gained.
+  Strength stimulus unchanged; habit and jogging base gained. Baseline metrics captured
+  (~3,000 steps/day, HR min 50 bpm) — the low step count makes the walk days the most
+  valuable change in the week, and makes the jogging readiness gates load-bearing.
