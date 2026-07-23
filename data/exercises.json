@@ -1295,5 +1295,52 @@
       "This is an easy day. If you finish feeling like you need a rest, you walked too hard."
     ],
     "images": []
+  },
+  {
+    "id": "Stair_Climb",
+    "name": "Stair Climb",
+    "level": "beginner",
+    "equipment": "body only",
+    "category": "cardio",
+    "primaryMuscles": [
+      "calves"
+    ],
+    "secondaryMuscles": [
+      "glutes",
+      "quadriceps",
+      "hamstrings"
+    ],
+    "instructions": [
+      "Walk up your stairs at a steady, conversational pace, then walk back down. Repeat continuously for the interval.",
+      "UP is the workout: drive through the whole foot, stand tall, let the glutes do the pushing.",
+      "DOWN is where knees complain — come down slowly and under control, one step at a time. Never rush or bounce down.",
+      "Knock knees: keep each knee tracking over the middle toe on the way up. If they drift inward, slow down.",
+      "This should feel like a brisk walk, not a race. If you cannot speak in sentences, ease off.",
+      "No stairs available, or knees grumbling? March on the spot instead for the same duration."
+    ],
+    "images": []
+  },
+  {
+    "id": "Marching_In_Place",
+    "name": "Marching In Place",
+    "level": "beginner",
+    "equipment": "body only",
+    "category": "cardio",
+    "primaryMuscles": [
+      "quadriceps"
+    ],
+    "secondaryMuscles": [
+      "calves",
+      "glutes",
+      "abdominals"
+    ],
+    "instructions": [
+      "Stand tall and march on the spot, lifting each knee to about hip height.",
+      "Swing the opposite arm with each step, as you would when walking.",
+      "Land softly through the whole foot — this is low impact, no jumping or bouncing.",
+      "Keep it conversational. This is a warm-up and an easy-day filler, not a hard effort.",
+      "Add a little more knee height or a bit more speed if it feels too easy."
+    ],
+    "images": []
   }
 ]

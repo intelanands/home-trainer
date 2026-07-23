@@ -82,9 +82,9 @@ decision point on buying heavier dumbbells — noted below, not assumed.
 | **Mon** | Full Body A | strength, ~50 min |
 | **Tue** | Reset — mobility & core | easy, ~20 min |
 | **Wed** | Full Body B | strength, ~50 min |
-| **Thu** | Easy — walk & calves | easy, ~30 min |
+| **Thu** | Easy — cardio & calves | easy, ~30 min |
 | **Fri** | Full Body C | strength, ~50 min |
-| **Sat** | Easy — long walk | easy, ~35 min |
+| **Sat** | Easy — long cardio | easy, ~35 min |
 | **Sun** | Rest | genuinely nothing |
 
 Adopted 22 Jul 2026. The reasoning matters, because the obvious alternative — six
@@ -100,6 +100,13 @@ Easy days exist to build the habit ("I move every day except Sunday" is a far ea
 rule than remembering which days are on), to undo desk sitting, and to build the
 walking and calf base that jogging needs. **They must stay easy** — if an easy day
 starts feeling like a workout, cut it back. Hard days hard, easy days easy.
+
+**Weather (from 23 Jul 2026):** it's the rainy season, so the cardio on the easy days
+is **stair climbing indoors** — same duration, same conversational effort, and it
+loads the calves and glutes harder than flat walking does. Walking outdoors is the
+preferred version whenever it's dry; the sessions say so, and swapping needs no plan
+change. Stairs carry one caveat the flat doesn't: **descending is where knees
+complain**, so come down slowly and controlled every time.
 
 ## Phases
 
@@ -127,9 +134,12 @@ jogging safe. This is the longest and most important phase.
 - **Push-up ladder:** incline height comes down step by step toward the floor
 - Glute-med work (side leg raises, single-leg bridges) stays in every week —
   this is the knock-knee correction and it never graduates out
-- **Saturday's long walk becomes the walk-jog day** once the readiness gates below
-  are met — same slot, jogging intervals spliced into the walk, starting at
+- **Saturday's long cardio becomes the walk-jog day** once the readiness gates below
+  are met — same slot, jogging intervals spliced into a walk, starting at
   1 min jog / 2 min walk × 6. No new day needed; the on-ramp is already in place.
+  This one does need dry weather (jogging indoors isn't practical), so if the rains
+  are still going, hold the walk-jog start and keep building on the stairs — the
+  strength gates carry on being met either way.
 
 - **Deferred to this phase: Strava sync.** Samsung Health syncs to Strava (Services
   tab), and Strava has a public OAuth API — so walks and runs can log themselves with
@@ -249,6 +259,11 @@ Short entries, newest last. Updated at each review.
   5 kg and squat down to 5 kg; both reflected in the plan. Disclosed knock knees →
   knees-out cues added, glute-med work promoted to 3 sets. Push-ups regressed to
   incline push-ups (a real ladder, unlike knee push-ups).
+- **23 Jul 2026** — Rainy season: the easy days' cardio moved indoors to stair
+  climbing (4×3 min Thu, 5×3 min Sat) plus marching as a warm-up. Same duration and
+  effort as the walks they replace; walking stays the preferred version whenever it's
+  dry. Session-B feedback applied (floor press → 3×12, side leg raises → 15, seated
+  calf raise → 3×15 after 20 easy reps).
 - **22 Jul 2026** — Back tweaked outside training (moved wrong on Tuesday). Session B
   swapped bent-over row → supported one-arm row, Russian twist → dead bug for the
   time being. Roadmap written. Exact dumbbell inventory captured: sessions now name a

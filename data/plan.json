@@ -9,7 +9,7 @@
       "bench-like furniture"
     ],
     "weights": [1, 1.5, 2.5, 4, 5, 6.5, 7.5, 9, 10],
-    "notes": "Home training. Weights are per hand. DISKS ARE NOT CHANGED MID-SESSION: each session's equipment list states the one rod setting to make before starting, and every two-handed exercise uses a fixed pair (1 / 2.5 / 5 kg). Rod maths — take the disks on ONE side, double it (two sides per hand), add the 1.5 kg rod: nothing → 1.5, 0.5 → 2.5, 1.25 → 4, 0.5+1.25 → 5, 2.5 → 6.5, 2.5+0.5 → 7.5, 2.5+1.25 → 9, 2.5+1.25+0.5 → 10. Knock knees (mild, noted Jul 2026) → cue knees OUT on every squat/lunge/step-up, and keep glute-med work (side leg raises, single-leg bridges) in every week. Left knee: mild discomfort on twists (noted Jul 2026) — knee work stays in pain-free range, no knee caving inward, no loaded twisting. Desk job (sits all day) → hip-flexor stretch every cooldown. Goal: start jogging — building calf capacity now; add a Saturday walk-jog day after 2-4 knee-quiet weeks. Sessions use supersets (blocks sharing a group interleave sets). SIX DAYS, THREE HARD: Mon/Wed/Fri are the strength sessions; Tue/Thu/Sat are short easy days (mobility, core, calves, walking) that build the habit and the jogging base without adding recovery load; Sunday is a real rest day. Keep easy days easy — if they start feeling like workouts, cut them back. Long-term plan: see ROADMAP.md."
+    "notes": "Home training. Weights are per hand. DISKS ARE NOT CHANGED MID-SESSION: each session's equipment list states the one rod setting to make before starting, and every two-handed exercise uses a fixed pair (1 / 2.5 / 5 kg). Rod maths — take the disks on ONE side, double it (two sides per hand), add the 1.5 kg rod: nothing → 1.5, 0.5 → 2.5, 1.25 → 4, 0.5+1.25 → 5, 2.5 → 6.5, 2.5+0.5 → 7.5, 2.5+1.25 → 9, 2.5+1.25+0.5 → 10. Knock knees (mild, noted Jul 2026) → cue knees OUT on every squat/lunge/step-up, and keep glute-med work (side leg raises, single-leg bridges) in every week. Left knee: mild discomfort on twists (noted Jul 2026) — knee work stays in pain-free range, no knee caving inward, no loaded twisting. Desk job (sits all day) → hip-flexor stretch every cooldown. Goal: start jogging — building calf capacity now; add a Saturday walk-jog day after 2-4 knee-quiet weeks. Sessions use supersets (blocks sharing a group interleave sets). SIX DAYS, THREE HARD: Mon/Wed/Fri are the strength sessions; Tue/Thu/Sat are short easy days (mobility, core, calves, cardio — stairs indoors during the rainy season, walking outdoors whenever it's dry; same duration either way) that build the habit and the jogging base without adding recovery load; Sunday is a real rest day. Keep easy days easy — if they start feeling like workouts, cut them back. Long-term plan: see ROADMAP.md."
   },
   "schedule": {
     "mon": "full-body-a",
@@ -81,10 +81,11 @@
       ]
     },
     "easy-walk": {
-      "title": "Easy — Walk & Calves",
-      "equipment": ["Comfortable shoes", "Yoga mat (for the stretches)", "Fixed 5 kg pair (calf raises)", "Water bottle"],
+      "title": "Easy — Cardio & Calves",
+      "equipment": ["Clear stairs", "Yoga mat (for the stretches)", "Fixed 5 kg pair (calf raises)", "Water bottle"],
       "blocks": [
-        { "exerciseId": "Brisk_Walk", "sets": 1, "durationSec": 1200, "restSec": 60, "note": "20 minutes, conversational pace. Take the phone and go — the timer runs in your pocket" },
+        { "exerciseId": "Marching_In_Place", "sets": 1, "durationSec": 180, "restSec": 30, "note": "Warm-up. Knees to hip height, arms swinging", "animate": true },
+        { "exerciseId": "Stair_Climb", "sets": 4, "durationSec": 180, "restSec": 60, "note": "Up steady, DOWN SLOW and controlled. Conversational pace — if it's dry outside, a 20-min walk swaps in perfectly", "animate": true },
         { "exerciseId": "Standing_Dumbbell_Calf_Raise", "sets": 3, "reps": 15, "weightKg": 5, "restSec": 45, "note": "Fixed 5 kg pair. Slow 3-sec lowering. FIRST TIME ONLY: before your sets, test how many SINGLE-leg raises you can do with no weight (fingertips on a wall for balance) — that number is a jogging gate, tell Claude both sides" },
         { "exerciseId": "Side_Leg_Raises", "sets": 2, "reps": 12, "restSec": 30, "note": "Per side — the knock-knee correction, little and often" },
         { "exerciseId": "Standing_Soleus_And_Achilles_Stretch", "sets": 2, "durationSec": 30, "restSec": 15, "note": "One set per side — the achilles is what complains first when new runners add mileage" },
@@ -92,10 +93,12 @@
       ]
     },
     "long-walk": {
-      "title": "Easy — Long Walk",
-      "equipment": ["Comfortable shoes", "Yoga mat (for the stretches)", "Water bottle"],
+      "title": "Easy — Long Cardio",
+      "equipment": ["Clear stairs", "Yoga mat (for the stretches)", "Water bottle"],
       "blocks": [
-        { "exerciseId": "Brisk_Walk", "sets": 1, "durationSec": 1800, "restSec": 60, "note": "30 minutes, conversational pace. This IS the jogging readiness test — when it feels easy, the walk-jog day starts here" },
+        { "exerciseId": "Marching_In_Place", "sets": 1, "durationSec": 180, "restSec": 30, "note": "Warm-up", "animate": true },
+        { "exerciseId": "Stair_Climb", "sets": 5, "durationSec": 180, "restSec": 60, "note": "Up steady, DOWN SLOW. Still conversational — this is an easy day, not intervals. Dry outside? A 30-min walk is the better version of this session", "animate": true },
+        { "exerciseId": "Step-up_with_Knee_Raise", "sets": 2, "reps": 12, "restSec": 45, "note": "Per leg, bottom stair, no weight — steady rhythm, knee tracking over the middle toe" },
         { "exerciseId": "Standing_Soleus_And_Achilles_Stretch", "sets": 2, "durationSec": 30, "restSec": 15, "note": "One set per side" },
         { "exerciseId": "90_90_Hamstring", "sets": 2, "durationSec": 30, "restSec": 15, "note": "One set per leg" },
         { "exerciseId": "Kneeling_Hip_Flexor", "sets": 2, "durationSec": 40, "restSec": 15, "note": "One set per side" },
